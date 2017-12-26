@@ -1,7 +1,9 @@
-package com.wgt.hotsausagenew;
+package com.wgt.hotsausagenew.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.wgt.hotsausagenew.R;
 
 public class MainActivity extends AppCompatActivity {
 

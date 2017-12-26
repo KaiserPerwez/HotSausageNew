@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="dark_gray">#424242</color>
+    <color name="light_gray">#9e9e9e</color>
+    <color name="bg_maroon">#a63328</color>
+    <color name="maroon_light">#b5a9443a</color>
+    <color name="folding_color">#64ec407a</color>
+    <color name="unfolded_header">#bfa63328</color>
 </resources>

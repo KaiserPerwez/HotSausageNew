@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
             UserModel userModel= authenticateUser(eT_username.getText().toString(), eT_password.getText().toString());
             //if(userModel!=null)
             {
+
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             }

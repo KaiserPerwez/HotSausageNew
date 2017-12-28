@@ -7,15 +7,15 @@ package com.wgt.hotsausagenew.model;
 public class BillModel {
     private String product;
     private int quantity;
-    private double price;
+    private double rate;
 
     public BillModel() {
     }
 
-    public BillModel(String product, int quantity, double price) {
+    public BillModel(String product, int quantity, double rate) {
         this.product = product;
         this.quantity = quantity;
-        this.price = price;
+        this.rate = rate;
     }
 
     public String getProduct() {
@@ -34,11 +34,11 @@ public class BillModel {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
-        return price;
+    public double getRate() {
+        return rate;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setRate(double rate) {
+        this.rate = rate;
     }
 }

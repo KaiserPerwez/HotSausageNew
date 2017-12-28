@@ -1,5 +1,8 @@
 package com.wgt.hotsausagenew.utils;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.wgt.hotsausagenew.model.SpecialItemModel;
 
 import java.util.ArrayList;
@@ -13,22 +16,60 @@ public class Constant {
     public static final String SPECIAL_1 = "SPECIAL_1";
     public static final String SPECIAL_2 = "SPECIAL_2";
 
-    public static List<SpecialItemModel> getSpecial1Items() {
-        String[] items = {"Special A", "Special B", "Special C", "Special D", "Special E", "Special F"};
-        double[]  price = {33.33, 23.33, 23.33, 44.5, 65.43, 35};
-        List<SpecialItemModel> list = new ArrayList<>();
-        for(int i=0; i<items.length; i++){
-            list.add(new SpecialItemModel(items[i], price[i]));
+    private static List<SpecialItemModel> specialList1 = new ArrayList<>();
+    private static List<SpecialItemModel> specialList2 = new ArrayList<>();
+
+    public static List<SpecialItemModel> getSpecialItemList(String specialType) {
+        switch (specialType) {
+            case SPECIAL_1:
+                return specialList1;
+            case SPECIAL_2:
+                return specialList2;
         }
-        return list;
+        return null;
     }
-    public static List<SpecialItemModel> getSpecial2Items() {
-        String[] items = {"Special J", "Special K", "Special L", "Special M", "Special N", "Special O"};
-        double[]  price = {33.33, 23.33, 23.33, 44.5, 65.43, 35};
-        List<SpecialItemModel> list = new ArrayList<>();
-        for(int i=0; i<items.length; i++){
-            list.add(new SpecialItemModel(items[i], price[i]));
+
+    public static double getPriceOfItem(String itemName, String specialType) {
+        if (specialType.equals(SPECIAL_1)) {
+            for (SpecialItemModel s : specialList1) {
+                if (s.getProd().equals(itemName))
+                    return s.getRate();
+            }
+        } else if (specialType.equals(SPECIAL_2)) {
+            for (SpecialItemModel s : specialList2) {
+                if (s.getProd().equals(itemName))
+                    return s.getRate();
+            }
         }
-        return list;
+        return 0;
+    }
+
+    public static boolean addSpecialItemToList(SpecialItemModel item, String specialType, Context context) {
+        switch (specialType) {
+            case SPECIAL_1:
+                //checking for duplicate value
+                for (SpecialItemModel si : specialList1) {
+                    if (si.getProd().equals(item.getProd())) {
+                        Toast.makeText(context, "Item : " + item.getProd() + " already exists", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                }
+                specialList1.add(item);
+                return true;
+
+            case SPECIAL_2:
+                //checking for duplicate value
+                for (SpecialItemModel si : specialList2) {
+                    if (si.getProd().equals(item.getProd())) {
+                        Toast.makeText(context, "Item : " + item.getProd() + " already exists", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                }
+                specialList2.add(item);
+                return true;
+            default:
+                Toast.makeText(context, "No Special List : " + specialType, Toast.LENGTH_SHORT).show();
+                return false;
+        }
     }
 }

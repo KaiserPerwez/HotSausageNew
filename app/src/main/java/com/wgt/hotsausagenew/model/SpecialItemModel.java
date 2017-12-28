@@ -1,27 +1,27 @@
 package com.wgt.hotsausagenew.model;
 
 public class SpecialItemModel {
-    private String description;
-    private double price;
+    private String prod;
+    private double rate;
 
-    public SpecialItemModel(String description, double price) {
-        this.description = description;
-        this.price = price;
+    public SpecialItemModel(String prod, double rate) {
+        this.prod = prod;
+        this.rate = rate;
     }
 
-    public String getDescription() {
-        return description;
+    public String getProd() {
+        return prod;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProd(String prod) {
+        this.prod = prod;
     }
 
-    public double getPrice() {
-        return price;
+    public double getRate() {
+        return rate;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setRate(double rate) {
+        this.rate = rate;
     }
 }

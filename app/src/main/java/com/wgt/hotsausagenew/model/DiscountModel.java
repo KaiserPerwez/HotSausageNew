@@ -1,41 +1,41 @@
 package com.wgt.hotsausagenew.model;
 
 public class DiscountModel {
-    private String itemName, itemDesc;
-    private double value;
+    private String product, prodDesc;
+    private double rate;
 
-    public DiscountModel(String itemName, String itemDesc, double value) {
-        this.itemName = itemName;
-        this.itemDesc = itemDesc;
-        this.value = value;
+    public DiscountModel(String product, String prodDesc, double rate) {
+        this.product = product;
+        this.prodDesc = prodDesc;
+        this.rate = rate;
     }
 
-    public String getItemName() {
-        return itemName;
+    public String getProduct() {
+        return product;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setProduct(String product) {
+        this.product = product;
     }
 
-    public String getItemDesc() {
-        return itemDesc;
+    public String getProdDesc() {
+        return prodDesc;
     }
 
-    public void setItemDesc(String itemDesc) {
-        this.itemDesc = itemDesc;
+    public void setProdDesc(String prodDesc) {
+        this.prodDesc = prodDesc;
     }
 
-    public double getValue() {
-        return value;
+    public double getRate() {
+        return rate;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setRate(double rate) {
+        this.rate = rate;
     }
 
     @Override
     public String toString() {
-        return itemName+" : "+value+" : "+itemDesc;
+        return product + " : " + rate + " : " + prodDesc;
     }
 }

@@ -49,9 +49,9 @@
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
                     android:text="Regular"
-                    android:textStyle="bold"
                     android:textAllCaps="false"
-                    android:textSize="@dimen/main_button_text" />
+                    android:textSize="@dimen/main_button_text"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/btn_large"
@@ -106,7 +106,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Regular\nCheese"
+                    android:padding="20dp"
+                    android:text="Regular Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -117,7 +118,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Large\nCheese"
+                    android:padding="20dp"
+                    android:text="Large Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -128,7 +130,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Special1\nCheese"
+                    android:padding="20dp"
+                    android:text="Special1 Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold"/>
@@ -139,7 +142,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Special2\nCheese"
+                    android:padding="20dp"
+                    android:text="Special2 Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -150,7 +154,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Footlong\nCheese"
+                    android:padding="20dp"
+                    android:text="Footlong Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -164,7 +169,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="50%\nSaver"
+                    android:padding="20dp"
+                    android:text="50% Saver"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -175,7 +181,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="100%\nSaver"
+                    android:padding="20dp"
+                    android:text="100% Saver"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -197,7 +204,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Extra\nCheese"
+                    android:padding="20dp"
+                    android:text="Extra Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -222,7 +230,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Regular\nSausage"
+                    android:padding="20dp"
+                    android:text="Regular Sausage"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -233,7 +242,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Large\nSausage"
+                    android:padding="20dp"
+                    android:text="Large Sausage"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -244,7 +254,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Footlong\nSausage"
+                    android:padding="20dp"
+                    android:text="Footlong Sausage"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -255,7 +266,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Giftcard\nSale"
+                    android:padding="20dp"
+                    android:text="Giftcard Sale"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
@@ -266,7 +278,8 @@
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:text="Giftcard\nUsed"
+                    android:padding="20dp"
+                    android:text="Giftcard Used"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />

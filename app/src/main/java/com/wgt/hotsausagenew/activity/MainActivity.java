@@ -24,6 +24,7 @@ import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.adapter.BillAdapter;
 import com.wgt.hotsausagenew.helper.RecyclerItemTouchHelper;
 import com.wgt.hotsausagenew.model.BillModel;
+import com.wgt.hotsausagenew.utils.Constant;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,8 +99,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     TextView tV_discount_amount;
     @BindView(R.id.tV_payable_amount)
     TextView tV_payable_amount;
-
-
+    boolean longClicked = false;//to avoid firing click event along with longclick
     private BillAdapter billAdapter;
 
     @Override
@@ -108,12 +108,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        populateRecyclerWithDummyData();
-        //enable swipe-to-delete interaction
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rV_billing_list);
+        InitialiseRecyclerViewWithAdapter();
     }
-
 
     //onSwipe implementation of RecyclerItemTouchHelperListener ie event on onSwiping of bill items to delete
     @Override
@@ -154,8 +150,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             button.setBackgroundResource(R.drawable.pressed_button);
         else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             button.setBackgroundResource(R.drawable.raised_button);
-            if (!longClicked) {
-                Toast.makeText(this, "Clicked " + button.getText(), Toast.LENGTH_SHORT).show();
+            if (!longClicked) {//normal click
+                {
+                    if (button.getText().toString().equalsIgnoreCase("Special 1"))
+                        billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_1)));
+                    else if (button.getText().toString().equalsIgnoreCase("Special 2"))
+                        billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));
+                    else
+                        billAdapter.addItem(new BillModel(button.getText().toString(), 1, 150));
+                }
             }
         }
         longClicked = false;
@@ -173,13 +176,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         startActivity(new Intent(this, PaymentActivity.class));
     }
 
-
-    boolean longClicked = false;//to avoid firing click event along with longclick
-
     @OnLongClick({R.id.btn_special_1, R.id.btn_special_2})
     public boolean special_LongClicked(Button button) {
-        Toast.makeText(this, "Long Clicked Only" + button.getText(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Long Clicked Special button" + button.getText(), Toast.LENGTH_SHORT).show();
         longClicked = true;
+
         return false;
     }
 
@@ -205,14 +206,16 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     //-----------------------------------------------------User defined Functions---------------------------//
 
-    private void populateRecyclerWithDummyData() {
-        //populate recycler with dummy data
+    private void InitialiseRecyclerViewWithAdapter() {
         billAdapter = new BillAdapter();
-        billAdapter.addItem(new BillModel("prod", 5, 4.5));
-        billAdapter.addItem(new BillModel("prod", 5, 4.5));
         rV_billing_list.setLayoutManager(new LinearLayoutManager(this));
         rV_billing_list.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         rV_billing_list.setAdapter(billAdapter);
+
+        //enable swipe-to-delete interaction
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rV_billing_list);
+
     }
 
     //hidden dialog buttons touched

@@ -51,8 +51,8 @@ public class Pref {
 
         //check for duplicate value
         for (DiscountModel d : list) {
-            if(d.getItemName().equals(discount.getItemName())) {
-                Toast.makeText(context, "Item : "+discount.getItemName()+" already exists.", Toast.LENGTH_SHORT).show();
+            if (d.getProduct().equals(discount.getProduct())) {
+                Toast.makeText(context, "Item : " + discount.getProduct() + " already exists.", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
@@ -69,7 +69,7 @@ public class Pref {
         if (list == null) return;
 
         for (DiscountModel d :list) {
-            if(d.getItemName().equals(itemName))
+            if (d.getProduct().equals(itemName))
                 continue;
             temp.add(d);
         }

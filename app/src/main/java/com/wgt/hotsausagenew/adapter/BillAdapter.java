@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 
 public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     private List<BillModel> list;
+
     public BillAdapter() {
         this.list = new ArrayList<>();
     }
@@ -35,10 +36,10 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        BillModel billModel=list.get(position);
+        BillModel billModel = list.get(position);
         holder.tV_product.setText(billModel.getProduct());
-        holder.tV_quantity.setText(Constant.multiplySign+billModel.getQuantity());
-        holder.tV_amount.setText(Constant.poundSign+billModel.getPrice());
+        holder.tV_quantity.setText(Constant.multiplySign + billModel.getQuantity());
+        holder.tV_amount.setText(Constant.poundSign + billModel.getRate());
     }
 
     @Override
@@ -47,16 +48,29 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     }
 
 
-
-
     //-----------------------------------------------------User defined Functions---------------------------//
-    public BillModel getItem(int position){
+    public BillModel getItem(int position) {
         return list.get(position);
     }
-    public void addItem(BillModel billModel){
-        list.add(billModel);
+
+    public void addItem(BillModel bill) {
+        for (int position = 0; position < list.size(); position++) {
+            BillModel item = list.get(position);  // item at i'th position
+            if (item.getProduct().equals(bill.getProduct())) {
+                // item matched ,increment quantity and price instead of adding it as new bill-item;
+                item.setQuantity(item.getQuantity() + 1);
+                item.setRate(item.getRate() + bill.getRate());
+                notifyItemChanged(position);
+                return;
+            }
+        }
+
+        // nothing matched.. add new bill
+        list.add(new BillModel(bill.getProduct(), 1, bill.getRate()));
         notifyItemInserted(list.size());
+        return;
     }
+
     public void removeItem(int position) {
         list.remove(position);
         // notify the item removed by position
@@ -64,13 +78,15 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         // NOTE: don't call notifyDataSetChanged()
         notifyItemRemoved(position);
     }
-    public void removeAll(){
-        int start=0,count=list.size();
+
+    public void removeAll() {
+        int start = 0, count = list.size();
         list.clear();
-        notifyItemRangeRemoved(start,count);
+        notifyItemRangeRemoved(start, count);
     }
-    public void restoreDeletedItem(BillModel item,int position){
-        list.add(position,item);
+
+    public void restoreDeletedItem(BillModel item, int position) {
+        list.add(position, item);
         // notify the item added by position
         // to perform recycler view animations
         // NOTE: don't call notifyDataSetChanged()
@@ -80,16 +96,21 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tV_product) TextView tV_product;
-        @BindView(R.id.tV_quantity) TextView tV_quantity;
-        @BindView(R.id.tV_amount) TextView tV_amount;
-        @BindView(R.id.foreground_view) public LinearLayout foreground_view;//made public to allow access from RecyclerItemTouchHelper.java in other package
-        @BindView(R.id.background_view) LinearLayout background_view;
+        @BindView(R.id.foreground_view)
+        public LinearLayout foreground_view;//made public to allow access from RecyclerItemTouchHelper.java in other package
+        @BindView(R.id.tV_product)
+        TextView tV_product;
+        @BindView(R.id.tV_quantity)
+        TextView tV_quantity;
+        @BindView(R.id.tV_amount)
+        TextView tV_amount;
+        @BindView(R.id.background_view)
+        LinearLayout background_view;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="horizontal"
+    android:gravity="center_horizontal">
+
+    <Button
+        android:id="@+id/btn_sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/calculator_total_button"
+        android:layout_margin="10dp"
+        android:text="Sync with Database"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_transaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/calculator_total_button"
+        android:layout_margin="10dp"
+        android:text="Today's transaction"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="255dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/calculator_total_button"
+        android:layout_margin="10dp"
+        android:text="Log Out"
+
+        android:textSize="20sp"/>
+
+
+</LinearLayout>

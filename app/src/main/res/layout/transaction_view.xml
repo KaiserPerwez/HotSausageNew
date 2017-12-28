@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ramotion.foldingcell.FoldingCell
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:folding-cell="http://schemas.android.com/apk/res-auto"
+    folding-cell:animationDuration="800"
+    folding-cell:cameraHeight="30"
+    folding-cell:backSideColor="@color/folding_color"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_maroon">
+
+    <include layout="@layout/transaction_unfolded_layout"/>
+
+    <include layout="@layout/transaction_folded_layout"/>
+</com.ramotion.foldingcell.FoldingCell>

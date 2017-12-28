@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:id="@+id/transaction_title_view"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tV_time"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="TIME"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"/>
+    <TextView
+        android:id="@+id/tV_amount"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="AMOUNT"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"/>
+    <TextView
+        android:id="@+id/tV_discount"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="DISCOUNT"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"/>
+    <TextView
+        android:id="@+id/tV_sale"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="SALE"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"/>
+
+
+</LinearLayout>

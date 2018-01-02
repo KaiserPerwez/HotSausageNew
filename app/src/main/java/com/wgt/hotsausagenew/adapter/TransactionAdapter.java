@@ -84,7 +84,7 @@ public class TransactionAdapter extends BaseAdapter {
             });
             cell.setTag(holder);
         }else {
-            if (unfoldedIndexes.contains(position)) {
+            if (unfoldedIndexes.contains(position)) { // to remember their state
                 cell.unfold(true);
             } else {
                 cell.fold(true);

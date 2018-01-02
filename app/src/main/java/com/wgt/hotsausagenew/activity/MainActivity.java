@@ -22,9 +22,12 @@ import android.widget.Toast;
 
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.adapter.BillAdapter;
+import com.wgt.hotsausagenew.dialog.DiscountDialogUtil;
+import com.wgt.hotsausagenew.dialog.GiftCardDialogUtils;
 import com.wgt.hotsausagenew.dialog.SpecialDialogUtil;
 import com.wgt.hotsausagenew.helper.RecyclerItemTouchHelper;
 import com.wgt.hotsausagenew.model.BillModel;
+import com.wgt.hotsausagenew.model.DiscountModel;
 import com.wgt.hotsausagenew.model.SpecialItemModel;
 import com.wgt.hotsausagenew.utils.Constant;
 
@@ -34,7 +37,7 @@ import butterknife.OnClick;
 import butterknife.OnLongClick;
 import butterknife.OnTouch;
 
-public class MainActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, View.OnTouchListener, SpecialDialogUtil.SpecialDialogItemClickListener {
+public class MainActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, View.OnTouchListener, SpecialDialogUtil.SpecialDialogItemClickListener, DiscountDialogUtil.DiscountDialogListener, GiftCardDialogUtils.GiftCardSelectedListener {
 
     //column 1
     @BindView(R.id.btn_regular)
@@ -152,18 +155,35 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             button.setBackgroundResource(R.drawable.pressed_button);
         else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             button.setBackgroundResource(R.drawable.raised_button);
-            if (!longClicked) {//normal click
+            if (!longClicked)//normal click
+            {
+                if (button.getText().toString().equalsIgnoreCase("Special1"))
+                    billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_1)));
+                else if (button.getText().toString().equalsIgnoreCase("Special2"))
+                    billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));
+                else if (button.getText().toString().equalsIgnoreCase("50% Saver"))
                 {
-                    if (button.getText().toString().equalsIgnoreCase("Special1"))
-                        billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_1)));
-                    else if (button.getText().toString().equalsIgnoreCase("Special2"))
-                        billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));
-                   /* else
-                        billAdapter.addItem(new BillModel(button.getText().toString(), 1, 150));*/
+                    //TODO:Implement 50% off on total amt
                 }
+                else if (button.getText().toString().equalsIgnoreCase("100% Saver"))
+                {
+                    //TODO:set total amt to be zero
+                }
+                else if (button.getText().toString().equalsIgnoreCase("GiftCard Used"))
+                {
+                    GiftCardDialogUtils giftCardDialogUtils = new GiftCardDialogUtils(this, this);
+                    giftCardDialogUtils.showDialog();
+                }
+                else if (button.getText().toString().equalsIgnoreCase("Discounts"))
+                {
+                    DiscountDialogUtil discountDialogUtil = new DiscountDialogUtil(this);
+                    discountDialogUtil.setDiscountDialogListener(this);
+                    discountDialogUtil.showDialog();
+                }
+
+                longClicked = false;
             }
         }
-        longClicked = false;
         return false;
     }
 
@@ -270,5 +290,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             default:
                 Toast.makeText(this, "Special Type Not found for : "+specialItem.getProd(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onDiscountselected(DiscountModel discount) {
+        billAdapter.addItem(new BillModel(discount.getProduct(), 1, discount.getRate()));
+    }
+
+    @Override
+    public void onGiftCardSelectedListener(BillModel bill) {
+        billAdapter.addItem(bill);
     }
 }

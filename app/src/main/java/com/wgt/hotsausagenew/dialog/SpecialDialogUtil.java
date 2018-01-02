@@ -114,7 +114,7 @@ public class SpecialDialogUtil implements AdapterView.OnItemClickListener {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 2.0f
         ));
-        dialog_et_col_2.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        dialog_et_col_2.setInputType(InputType.TYPE_CLASS_NUMBER);
 
 
         dialog_et_col_1.setHint("Enter Product");

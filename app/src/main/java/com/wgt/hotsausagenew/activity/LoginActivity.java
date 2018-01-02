@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.database.AppDatabase;
+import com.wgt.hotsausagenew.dialog.AddUserDialogUtil;
 import com.wgt.hotsausagenew.model.UserModel;
 
 import java.util.List;
@@ -64,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             button.setBackgroundResource(R.drawable.login_button);
             Toast.makeText(this, "Clicked login", Toast.LENGTH_SHORT).show();
-            UserModel userModel= authenticateUser(eT_username.getText().toString(), eT_password.getText().toString());
+            UserModel userModel = authenticateUser(eT_username.getText().toString(), eT_password.getText().toString());
             //if(userModel!=null)
             {
 
@@ -74,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         return false;
     }
-
 
 
     @OnTouch({R.id.iV_update, R.id.tV_update})
@@ -121,18 +121,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @OnLongClick(R.id.tV_login)
-    public boolean open_AddUserDialog_byAdminOnly(){
-        UserModel userModel= authenticateUser("AdminIndia", eT_password.getText().toString());
-       // if(userModel!=null) {
-            final Dialog hiddenDialog = new Dialog(this);// Create custom dialog object
-            hiddenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            hiddenDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            hiddenDialog.setCancelable(true);
-            hiddenDialog.setContentView(R.layout.dialog_menu);
-            hiddenDialog.show();
+    public boolean open_AddUserDialog_byAdminOnly() {
+        UserModel userModel = authenticateUser("AdminIndia", eT_password.getText().toString());
+        // if(userModel!=null) {
+        final Dialog hiddenDialog = new Dialog(this);// Create custom dialog object
+        hiddenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        hiddenDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        hiddenDialog.setCancelable(true);
+        hiddenDialog.setContentView(R.layout.dialog_add_data);
+        hiddenDialog.show();
+
+        AddUserDialogUtil addUserDialogUtil = new AddUserDialogUtil(this, hiddenDialog);
+        addUserDialogUtil.populateListView();
         //}
         return false;
     }
+
+
     //-----------------------------------------------------User defined Functions---------------------------//
     private void initialiseLoginTable() {
 
@@ -162,8 +167,9 @@ public class LoginActivity extends AppCompatActivity {
 //                 id=user.id;
 //        }
     }
+
     private UserModel authenticateUser(String username, String password) {
-        UserModel userModel=null;
+        UserModel userModel = null;
 //        if (database != null) {
 //            userModel = database.userDAO().getUser(username, password);
 //            if (userModel == null)

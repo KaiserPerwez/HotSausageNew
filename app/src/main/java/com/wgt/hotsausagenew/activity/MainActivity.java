@@ -179,6 +179,25 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     @OnLongClick({R.id.btn_special_1, R.id.btn_special_2})
     public boolean special_LongClicked(Button button) {
         Toast.makeText(this, "Long Clicked Special button" + button.getText(), Toast.LENGTH_SHORT).show();
+
+
+        final Dialog hiddenDialog = new Dialog(this);// Create custom dialog object
+        hiddenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        hiddenDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        hiddenDialog.setCancelable(true);
+        hiddenDialog.setContentView(R.layout.dialog_add_data);
+        hiddenDialog.show();
+
+
+
+
+
+
+
+
+
+
+
         longClicked = true;
 
         return false;
@@ -230,8 +249,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         int id = v.getId();
         if (id == R.id.btn_sync)
             Toast.makeText(this, "Syncing..", Toast.LENGTH_SHORT).show();
-        else if (id == R.id.btn_transaction)
+        else if (id == R.id.btn_transaction) {
             startActivity(new Intent(this, TransactionActivity.class));
+            finish();
+        }
         else if (id == R.id.btn_logout) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();

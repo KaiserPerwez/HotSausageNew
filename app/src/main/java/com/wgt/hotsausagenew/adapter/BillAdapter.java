@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 
 public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     private List<BillModel> list;
-
+    private RecyclerView rv;
     public BillAdapter() {
         this.list = new ArrayList<>();
     }
@@ -31,6 +31,8 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.billing_item_view, parent, false);
+        if (rv == null && parent instanceof RecyclerView)
+            rv = (RecyclerView) parent;
         return new ViewHolder(view);
     }
 
@@ -61,6 +63,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
                 item.setQuantity(item.getQuantity() + 1);
                 item.setRate(item.getRate() + bill.getRate());
                 notifyItemChanged(position);
+                rv.scrollToPosition(position);//allow auto-scroll to item at pos
                 return;
             }
         }
@@ -68,6 +71,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         // nothing matched.. add new bill
         list.add(new BillModel(bill.getProduct(), 1, bill.getRate()));
         notifyItemInserted(list.size());
+        rv.scrollToPosition(list.size());//allow auto-scroll to item at pos
         return;
     }
 
@@ -91,6 +95,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         // to perform recycler view animations
         // NOTE: don't call notifyDataSetChanged()
         notifyItemInserted(position);
+        rv.scrollToPosition(position);//allow auto-scroll to item at pos
     }
 //-----------------------------------------------------------------------------------------------------//
 

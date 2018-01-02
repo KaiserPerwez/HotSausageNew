@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="10dp"
-    android:weightSum="5">
+    android:weightSum="5"
+    android:id="@+id/dialog_add_data_layout">
 
     <TextView
         android:id="@+id/dialog_listitem_col_1"

@@ -29,6 +29,17 @@ public class Constant {
         return null;
     }
 
+    public static SpecialItemModel getItem(int position, String key) {
+        switch (key) {
+            case SPECIAL_1:
+                return specialList1.get(position);
+            case SPECIAL_2 :
+                return specialList2.get(position);
+            default:
+                return null;
+        }
+    }
+
     public static double getPriceOfItem(String itemName, String specialType) {
         if (specialType.equals(SPECIAL_1)) {
             for (SpecialItemModel s : specialList1) {

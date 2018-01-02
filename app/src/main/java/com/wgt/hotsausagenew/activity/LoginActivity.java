@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         //database.userDAO().removeAllUsers();
 
         //initialise Login table if empty
-        initialiseLoginTable();
+        //initialiseLoginTable();
     }
 
     @OnTouch(R.id.btn_login)
@@ -124,14 +124,15 @@ public class LoginActivity extends AppCompatActivity {
     public boolean open_AddUserDialog_byAdminOnly() {
         UserModel userModel = authenticateUser("AdminIndia", eT_password.getText().toString());
         // if(userModel!=null) {
-        final Dialog hiddenDialog = new Dialog(this);// Create custom dialog object
+        /*final Dialog hiddenDialog = new Dialog(this);// Create custom dialog object
         hiddenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         hiddenDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         hiddenDialog.setCancelable(true);
         hiddenDialog.setContentView(R.layout.dialog_add_data);
-        hiddenDialog.show();
+        hiddenDialog.show();*/
 
-        AddUserDialogUtil addUserDialogUtil = new AddUserDialogUtil(this, hiddenDialog);
+        AddUserDialogUtil addUserDialogUtil = new AddUserDialogUtil(this);
+        addUserDialogUtil.showDialog();
         addUserDialogUtil.populateListView();
         //}
         return false;

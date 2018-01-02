@@ -22,8 +22,10 @@ import android.widget.Toast;
 
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.adapter.BillAdapter;
+import com.wgt.hotsausagenew.dialog.SpecialDialogUtil;
 import com.wgt.hotsausagenew.helper.RecyclerItemTouchHelper;
 import com.wgt.hotsausagenew.model.BillModel;
+import com.wgt.hotsausagenew.model.SpecialItemModel;
 import com.wgt.hotsausagenew.utils.Constant;
 
 import butterknife.BindView;
@@ -32,7 +34,7 @@ import butterknife.OnClick;
 import butterknife.OnLongClick;
 import butterknife.OnTouch;
 
-public class MainActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, View.OnTouchListener {
+public class MainActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, View.OnTouchListener, SpecialDialogUtil.SpecialDialogItemClickListener {
 
     //column 1
     @BindView(R.id.btn_regular)
@@ -152,12 +154,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             button.setBackgroundResource(R.drawable.raised_button);
             if (!longClicked) {//normal click
                 {
-                    if (button.getText().toString().equalsIgnoreCase("Special 1"))
+                    if (button.getText().toString().equalsIgnoreCase("Special1"))
                         billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_1)));
-                    else if (button.getText().toString().equalsIgnoreCase("Special 2"))
+                    else if (button.getText().toString().equalsIgnoreCase("Special2"))
                         billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));
-                    else
-                        billAdapter.addItem(new BillModel(button.getText().toString(), 1, 150));
+                   /* else
+                        billAdapter.addItem(new BillModel(button.getText().toString(), 1, 150));*/
                 }
             }
         }
@@ -180,26 +182,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     public boolean special_LongClicked(Button button) {
         Toast.makeText(this, "Long Clicked Special button" + button.getText(), Toast.LENGTH_SHORT).show();
 
+        String key = "";
+        if (button.getId() == R.id.btn_special_1) {
+            key = Constant.SPECIAL_1;
+        } else if (button.getId() == R.id.btn_special_2) {
+            key = Constant.SPECIAL_2;
+        }
 
-        final Dialog hiddenDialog = new Dialog(this);// Create custom dialog object
-        hiddenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        hiddenDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        hiddenDialog.setCancelable(true);
-        hiddenDialog.setContentView(R.layout.dialog_add_data);
-        hiddenDialog.show();
-
-
-
-
-
-
-
-
-
-
+        SpecialDialogUtil sdu = new SpecialDialogUtil(this, key);
+        sdu.setSpecialDialogItemClickListener(this);
+        sdu.showDialog();
 
         longClicked = true;
-
         return false;
     }
 
@@ -260,5 +254,21 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
 
         return false;
+    }
+
+    @Override
+    public void onSpecialItemClicked(String key, SpecialItemModel specialItem) {
+        switch (key) {
+            case Constant.SPECIAL_1 :
+                Toast.makeText(this, "SPECIAL 1 : "+specialItem.getProd(), Toast.LENGTH_SHORT).show();
+                btn_special1_opt.setText(specialItem.getProd()+" Cheese");
+                break;
+            case Constant.SPECIAL_2:
+                Toast.makeText(this, "SPECIAL 2 : "+specialItem.getProd(), Toast.LENGTH_SHORT).show();
+                btn_special2_opt.setText(specialItem.getProd()+" Cheese");
+                break;
+            default:
+                Toast.makeText(this, "Special Type Not found for : "+specialItem.getProd(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -68,11 +68,21 @@ public class AddUserDialogUtil implements DeleteDataDialogUtil.DeletionSelected 
     @BindView(R.id.dialog_listview)
     ListView dialog_listview;
 
-    public AddUserDialogUtil(Context ctx, Dialog hiddenDialog) {
-        this.hiddenDialog = hiddenDialog;
+    public AddUserDialogUtil(Context ctx) {
+        this.hiddenDialog = new Dialog(ctx);// Create custom dialog object
+        hiddenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        hiddenDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        hiddenDialog.setCancelable(true);
+        hiddenDialog.setContentView(R.layout.dialog_add_data);
+        //hiddenDialog.show();
+
         this.ctx = ctx;
         ButterKnife.bind(this, hiddenDialog);
         modifyUiAsPerRequirement();
+    }
+
+    public void showDialog() {
+        hiddenDialog.show();
     }
 
     @OnClick(R.id.dialog_iV_add)

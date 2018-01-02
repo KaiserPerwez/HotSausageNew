@@ -63,7 +63,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
                 item.setQuantity(item.getQuantity() + 1);
                 item.setRate(item.getRate() + bill.getRate());
                 notifyItemChanged(position);
-                rv.scrollToPosition(position);//allow auto-scroll to item at pos
+                //rv.scrollToPosition(position);//allow auto-scroll to item at pos
                 return;
             }
         }
@@ -71,7 +71,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         // nothing matched.. add new bill
         list.add(new BillModel(bill.getProduct(), 1, bill.getRate()));
         notifyItemInserted(list.size());
-        rv.scrollToPosition(list.size());//allow auto-scroll to item at pos
+        //rv.scrollToPosition(list.size());//allow auto-scroll to item at pos
         return;
     }
 

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.wgt.hotsausagenew.activity.MainActivity">
+    android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
@@ -29,22 +28,34 @@
             app:srcCompat="@drawable/header_logo" />
 
 
-        <TableLayout
+        <!--<include-->
+            <!--layout="@layout/main_test_buttons"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--app:layout_constraintVertical_bias="0.31" />-->
+        <GridLayout
+
             android:id="@+id/tableLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:columnCount="1"
             android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iV_header">
+            android:rowCount="4"
+            app:layout_constraintTop_toBottomOf="@id/iV_header">
 
-            <!-- Row 1 -->
-            <TableRow android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="5dp">
 
                 <Button
                     android:id="@+id/btn_regular"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
@@ -55,29 +66,32 @@
 
                 <Button
                     android:id="@+id/btn_large"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
                     android:text="Large"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/btn_special_1"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
                     android:text="Special1"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <Button
                     android:id="@+id/btn_special_2"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
@@ -88,7 +102,8 @@
 
                 <Button
                     android:id="@+id/btn_footlong"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
@@ -96,17 +111,22 @@
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
-            </TableRow>
+            </LinearLayout>
 
-            <TableRow android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:gravity="center">
 
                 <Button
                     android:id="@+id/btn_reg_cheese"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="Regular Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
@@ -114,35 +134,35 @@
 
                 <Button
                     android:id="@+id/btn_large_cheese"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="Large Cheese"
-                    android:textAllCaps="false"
-                    android:textSize="@dimen/main_button_text"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btn_special1_opt"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/grid_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/raised_button"
-                    android:padding="20dp"
-                    android:text="Special1 Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold"/>
 
                 <Button
-                    android:id="@+id/btn_special2_opt"
-                    android:layout_height="match_parent"
+                    android:id="@+id/btn_special1_opt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
+                    android:text="Special1 Cheese"
+                    android:textAllCaps="false"
+                    android:textSize="@dimen/main_button_text"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_special2_opt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/grid_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/raised_button"
                     android:text="Special2 Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
@@ -150,26 +170,31 @@
 
                 <Button
                     android:id="@+id/btn_footlong_cheese"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="Footlong Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
-            </TableRow>
+            </LinearLayout>
 
-            <TableRow android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="5dp">
 
                 <Button
                     android:id="@+id/btn_save_50"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="50% Saver"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
@@ -177,11 +202,11 @@
 
                 <Button
                     android:id="@+id/btn_save_100"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="100% Saver"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
@@ -189,7 +214,8 @@
 
                 <Button
                     android:id="@+id/btn_drink"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
@@ -200,11 +226,11 @@
 
                 <Button
                     android:id="@+id/btn_extra_cheese"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="Extra Cheese"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
@@ -212,7 +238,8 @@
 
                 <Button
                     android:id="@+id/btn_discount"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
@@ -220,17 +247,22 @@
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
                     android:textStyle="bold" />
-            </TableRow>
+            </LinearLayout>
 
-            <TableRow android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:gravity="center">
 
                 <Button
                     android:id="@+id/btn_reg_sausage"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="Regular Sausage"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
@@ -238,23 +270,24 @@
 
                 <Button
                     android:id="@+id/btn_large_sausage"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="Large Sausage"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:padding="1dp"/>
 
                 <Button
                     android:id="@+id/btn_footlong_sausage"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="Footlong Sausage"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
@@ -262,29 +295,32 @@
 
                 <Button
                     android:id="@+id/btn_gift_sale"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="Giftcard Sale"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+
+                    />
 
                 <Button
                     android:id="@+id/btn_gift_used"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/grid_margin"
                     android:layout_weight="1"
                     android:background="@drawable/raised_button"
-                    android:padding="20dp"
                     android:text="Giftcard Used"
                     android:textAllCaps="false"
                     android:textSize="@dimen/main_button_text"
-                    android:textStyle="bold" />
-            </TableRow>
-        </TableLayout>
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+        </GridLayout>
 
     </android.support.constraint.ConstraintLayout>
 

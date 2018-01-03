@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.wgt.hotsausagenew.model.SpecialItemModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Constant {
@@ -15,6 +16,43 @@ public class Constant {
 
     public static final String SPECIAL_1 = "SPECIAL_1";
     public static final String SPECIAL_2 = "SPECIAL_2";
+
+
+    public static final int KEY_REGULAR = 1;
+    public static final int KEY_LARGE = 2;
+    public static final int KEY_FOOTLONG = 3;
+    public static final int KEY_REGULAR_CHEESE = 4;
+    public static final int KEY_LARGE_CHEESE = 5;
+    public static final int KEY_SPECIAL_1_CHEESE = 6;  //not actual price.. extra price for CHEESE
+    public static final int KEY_SPECIAL_2_CHEESE = 7;  //not actual price.. extra price for CHEESE
+    public static final int KEY_FOOTLONG_CHEESE = 8;
+    public static final int KEY_DRINK = 9;
+    public static final int KEY_EXTRA_CHEESE = 10;
+    public static final int KEY_REGULAR_SAUSAGE = 11;
+    public static final int KEY_LARGE_SAUSAGE = 12;
+    public static final int KEY_FOOTLONG_SAUSAGE = 13;
+
+    private static HashMap<Integer, Double> productPriceMap = new HashMap<>();
+
+    static {
+        productPriceMap.put(KEY_REGULAR, 120.00);
+        productPriceMap.put(KEY_LARGE, 220.00);
+        productPriceMap.put(KEY_FOOTLONG, 65.00);
+        productPriceMap.put(KEY_REGULAR_CHEESE, 150.00);
+        productPriceMap.put(KEY_LARGE_CHEESE, 250.00);
+        productPriceMap.put(KEY_SPECIAL_1_CHEESE, 100.00);
+        productPriceMap.put(KEY_SPECIAL_2_CHEESE, 100.00);
+        productPriceMap.put(KEY_FOOTLONG_CHEESE, 160.00);
+        productPriceMap.put(KEY_DRINK, 50.00);
+        productPriceMap.put(KEY_EXTRA_CHEESE, 70.00);
+        productPriceMap.put(KEY_REGULAR_SAUSAGE, 75.00);
+        productPriceMap.put(KEY_LARGE_SAUSAGE, 130.00);
+        productPriceMap.put(KEY_FOOTLONG_SAUSAGE, 120.00);
+    }
+
+    public static double getPriceOfKeyItem(int key) {
+        return productPriceMap.get(key);
+    }
 
     private static List<SpecialItemModel> specialList1 = new ArrayList<>();
     private static List<SpecialItemModel> specialList2 = new ArrayList<>();
@@ -83,4 +121,8 @@ public class Constant {
                 return false;
         }
     }
+
+
+
+
 }

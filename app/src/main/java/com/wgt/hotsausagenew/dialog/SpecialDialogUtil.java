@@ -114,7 +114,7 @@ public class SpecialDialogUtil implements AdapterView.OnItemClickListener {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 2.0f
         ));
-        dialog_et_col_2.setInputType(InputType.TYPE_CLASS_NUMBER);
+        dialog_et_col_2.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
 
         dialog_et_col_1.setHint("Enter Product");
@@ -149,27 +149,13 @@ public class SpecialDialogUtil implements AdapterView.OnItemClickListener {
 
     @OnClick(R.id.dialog_btn_add_item)
     public void addSpecialItem() {
-        try {
-            String prod = dialog_et_col_1.getText().toString();
-            if (prod.length() < 1){
-                dialog_et_col_1.requestFocus();
-                throw new Exception("Provide Product Name");
-            }
-            double price = Double.parseDouble(dialog_et_col_2.getText().toString());
-            if (price < 1) {
-                throw new Exception("Provide Correct Price");
-            }
 
-            SpecialItemModel item = new SpecialItemModel(prod, price);
-            boolean s =  adapter.addItem(item);
+        SpecialItemModel specialItemModel = validateData();
+        if (specialItemModel != null) {
+            boolean s =  adapter.addItem(specialItemModel);
             if (s) {
                 hideAddUserPanel();
             }
-        }catch (NumberFormatException e) {
-            Toast.makeText(context, "ERROR : Provide Correct Price", Toast.LENGTH_SHORT).show();
-            dialog_et_col_2.requestFocus();
-        }catch (Exception e) {
-            Toast.makeText(context, "ERROR : "+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -183,5 +169,50 @@ public class SpecialDialogUtil implements AdapterView.OnItemClickListener {
 
     public interface SpecialDialogItemClickListener {
         void onSpecialItemClicked(String key, SpecialItemModel specialItem);
+    }
+
+    private SpecialItemModel validateData() {
+        SpecialItemModel item = null;
+        try {
+            String name = dialog_et_col_1.getText().toString().trim();
+            if (name.length() < 1) {
+                dialog_et_col_1.requestFocus();
+                throw new Exception("Provide Item Name.");
+            }
+            // validating name;  max 19 alphabet in total -> one space,  max 9 alphabet each word, max 2 words in total
+            //total 19 alphabets
+            if (name.length() > 19) {
+                dialog_et_col_1.requestFocus();
+                throw new Exception("name must be of max 19 characters");
+            }
+            String[] words = name.split(" ");
+            int wordCount = words.length;
+            // must have max 2 words
+            if (wordCount > 2){
+                dialog_et_col_1.requestFocus();
+                throw new Exception("Item Name can have max 2 words");
+            }
+
+            // each word can have max 9 characters
+            for (int i=0;i<wordCount;i++) {
+                if (words[i].length()>9) {
+                    dialog_et_col_1.requestFocus();
+                    throw new Exception(words[i]+" exceeds 9 characters");
+                }
+            }
+
+            double value = Double.parseDouble(dialog_et_col_2.getText().toString().trim());
+            if (value < 1) {
+                dialog_et_col_2.requestFocus();
+                throw new Exception("Provide Item Value");
+            }
+            item = new SpecialItemModel(name, value);
+        }catch (NumberFormatException e) {
+            dialog_et_col_2.requestFocus();
+            Toast.makeText(context, "ERROR : Provide correct Item Value.", Toast.LENGTH_SHORT).show();
+        }catch (Exception e) {
+            Toast.makeText(context, "ERROR : "+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        return item;
     }
 }

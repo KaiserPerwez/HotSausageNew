@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.adapter.AddUserAdapter;
+import com.wgt.hotsausagenew.database.AppDatabase;
 import com.wgt.hotsausagenew.model.UserModel;
 
 import java.util.ArrayList;
@@ -103,22 +105,45 @@ public class AddUserDialogUtil implements DeleteDataDialogUtil.DeletionSelected 
 
     @OnClick(R.id.dialog_btn_add_item)
     public void addUserToListAndDatabase() {
-        Toast.makeText(ctx, "Stored", Toast.LENGTH_SHORT).show();
+        UserModel user = validateData();
+        if (user != null) {
+            AppDatabase.getDatabase(ctx).userDAO().addUser(user);
+            Toast.makeText(ctx, "Stored", Toast.LENGTH_SHORT).show();
+            populateListView();
+            hideAddUserPanel();
+        }
+    }
+
+    private UserModel validateData() {
         String username = dialog_et_col_1.getText().toString();
         String pwd = dialog_et_col_2.getText().toString();
         String site = dialog_et_col_3.getText().toString();
-
-        UserModel newUser = new UserModel(username, pwd, site, 0);
-        addUserAdapter.addItem(newUser);
-        hideAddUserPanel();
-
+        if (username.length() < 1){
+            Toast.makeText(ctx, "ERROR : Provide Username", Toast.LENGTH_SHORT).show();
+            dialog_et_col_1.requestFocus();
+            return null;
+        }else if (pwd.length() < 1) {
+            Toast.makeText(ctx, "ERROR : Provide Password", Toast.LENGTH_SHORT).show();
+            dialog_et_col_2.requestFocus();
+            return null;
+        }else if (site.length() < 1) {
+            Toast.makeText(ctx, "ERROR : Provide Site", Toast.LENGTH_SHORT).show();
+            dialog_et_col_3.requestFocus();
+            return null;
+        }
+        return new UserModel(username, pwd, site, 0);
     }
 
     private void modifyUiAsPerRequirement() {
         dialog_title.setText("User List");
         dialog_et_col_1.setHint("Enter Username");
         dialog_et_col_2.setHint("Enter Password");
-        dialog_et_col_2.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+
+        //to enable normal keyboard
+        dialog_et_col_2.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        //to transform typed characters into bullets
+        dialog_et_col_2.setTransformationMethod(new PasswordTransformationMethod());
+
         dialog_et_col_3.setHint("Enter Site");
 
         dialog_header_col_1.setText("Username");
@@ -129,9 +154,10 @@ public class AddUserDialogUtil implements DeleteDataDialogUtil.DeletionSelected 
     public void populateListView() {
         //send list from database
         userModelList = new ArrayList<>();
-        userModelList.add(new UserModel("user 1", "pass 1", "site 1", 0));
+        /*userModelList.add(new UserModel("user 1", "pass 1", "site 1", 0));
         userModelList.add(new UserModel("user 2", "pass 2", "site 2", 0));
-        userModelList.add(new UserModel("user 3", "pass 3", "site 3", 0));
+        userModelList.add(new UserModel("user 3", "pass 3", "site 3", 0));*/
+        userModelList =  AppDatabase.getDatabase(ctx).userDAO().getAllUser();
         addUserAdapter = new AddUserAdapter(userModelList, ctx);
         dialog_listview.setAdapter(addUserAdapter);
         dialog_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -153,6 +179,8 @@ public class AddUserDialogUtil implements DeleteDataDialogUtil.DeletionSelected 
 
     @Override
     public void onDeletionSelected(String itemName) {
-        addUserAdapter.removeItem(itemName);
+        //addUserAdapter.removeItem(itemName);
+        AppDatabase.getDatabase(ctx).userDAO().deleteUser(itemName);
+        populateListView();
     }
 }

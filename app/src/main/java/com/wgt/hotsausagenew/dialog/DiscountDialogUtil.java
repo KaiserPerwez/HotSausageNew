@@ -93,7 +93,7 @@ public class DiscountDialogUtil implements AdapterView.OnItemLongClickListener,
         dialog_title.setText("DISCOUNTS");
         dialog_et_col_1.setHint("Enter Product");
         dialog_et_col_2.setHint("Enter Price");
-        dialog_et_col_2.setInputType(InputType.TYPE_CLASS_NUMBER);
+        dialog_et_col_2.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
         dialog_et_col_3.setHint("Enter Description");
 
         dialog_header_col_1.setText("Product");

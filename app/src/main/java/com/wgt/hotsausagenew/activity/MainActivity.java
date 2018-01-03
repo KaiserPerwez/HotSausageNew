@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -106,13 +107,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     TextView tV_payable_amount;
     boolean longClicked = false;//to avoid firing click event along with longclick
     private BillAdapter billAdapter;
+    private Handler handler;
+    private boolean backPressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        handler = new Handler();
         InitialiseRecyclerViewWithAdapter();
     }
 
@@ -157,25 +160,128 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             button.setBackgroundResource(R.drawable.raised_button);
             if (!longClicked)//normal click
             {
-                if (button.getText().toString().equalsIgnoreCase("Special1"))
+                if (button.getId() == R.id.btn_regular) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_REGULAR)
+                            )
+                    );
+                } else if (button.getId() == R.id.btn_large) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_LARGE)
+                            )
+                    );
+                } else if (button.getId()==R.id.btn_footlong) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_FOOTLONG)
+                            )
+                    );
+                }else if (button.getId()==R.id.btn_reg_cheese) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_REGULAR_CHEESE)
+                            )
+                    );
+                } else if (button.getId()==R.id.btn_large_cheese) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_LARGE_CHEESE)
+                            )
+                    );
+                } else if (button.getId()==R.id.btn_special1_opt) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(), //item name
+                                    1, //quantity
+                                    Constant.getPriceOfItem(
+                                            button.getText().toString().split(" ")[0],
+                                            Constant.SPECIAL_1 //base price
+                                    )+Constant.getPriceOfKeyItem(Constant.KEY_SPECIAL_1_CHEESE) //additional charges for cheese
+                            )
+                    );
+                }else if (button.getId()==R.id.btn_special2_opt) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfItem(
+                                            button.getText().toString().split(" ")[0],
+                                            Constant.SPECIAL_2
+                                    )+Constant.getPriceOfKeyItem(Constant.KEY_SPECIAL_2_CHEESE)
+                            )
+                    );
+                } else if (button.getId()==R.id.btn_footlong_cheese) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_FOOTLONG_CHEESE)
+                            )
+                    );
+                } else if (button.getId()==R.id.btn_drink) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_DRINK)
+                            )
+                    );
+                } else if (button.getId()==R.id.btn_extra_cheese) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_EXTRA_CHEESE)
+                            )
+                    );
+                } else if (button.getId()==R.id.btn_reg_sausage) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_REGULAR_SAUSAGE)
+                            )
+                    );
+                } else if (button.getId()==R.id.btn_large_sausage) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_LARGE_SAUSAGE)
+                            )
+                    );
+                } else if (button.getId()==R.id.btn_footlong_sausage) {
+                    billAdapter.addItem(
+                            new BillModel(
+                                    button.getText().toString(),
+                                    1,
+                                    Constant.getPriceOfKeyItem(Constant.KEY_FOOTLONG_SAUSAGE)
+                            )
+                    );
+                }/*else if (button.getText().toString().equalsIgnoreCase("Special1"))
                     billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_1)));
                 else if (button.getText().toString().equalsIgnoreCase("Special2"))
-                    billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));
-                else if (button.getText().toString().equalsIgnoreCase("50% Saver"))
-                {
+                    billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));*/
+                else if (button.getText().toString().equalsIgnoreCase("50% Saver")) {
                     //TODO:Implement 50% off on total amt
-                }
-                else if (button.getText().toString().equalsIgnoreCase("100% Saver"))
-                {
+                } else if (button.getText().toString().equalsIgnoreCase("100% Saver")) {
                     //TODO:set total amt to be zero
-                }
-                else if (button.getText().toString().equalsIgnoreCase("GiftCard Used"))
-                {
+                } else if (button.getText().toString().equalsIgnoreCase("GiftCard Used")) {
                     GiftCardDialogUtils giftCardDialogUtils = new GiftCardDialogUtils(this, this);
                     giftCardDialogUtils.showDialog();
-                }
-                else if (button.getText().toString().equalsIgnoreCase("Discounts"))
-                {
+                } else if (button.getText().toString().equalsIgnoreCase("Discounts")) {
                     DiscountDialogUtil discountDialogUtil = new DiscountDialogUtil(this);
                     discountDialogUtil.setDiscountDialogListener(this);
                     discountDialogUtil.showDialog();
@@ -266,8 +372,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         else if (id == R.id.btn_transaction) {
             startActivity(new Intent(this, TransactionActivity.class));
             finish();
-        }
-        else if (id == R.id.btn_logout) {
+        } else if (id == R.id.btn_logout) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
@@ -279,16 +384,16 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     @Override
     public void onSpecialItemClicked(String key, SpecialItemModel specialItem) {
         switch (key) {
-            case Constant.SPECIAL_1 :
-                Toast.makeText(this, "SPECIAL 1 : "+specialItem.getProd(), Toast.LENGTH_SHORT).show();
-                btn_special1_opt.setText(specialItem.getProd()+" Cheese");
+            case Constant.SPECIAL_1:
+                Toast.makeText(this, "SPECIAL 1 : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
+                btn_special1_opt.setText(specialItem.getProd() + " Cheese");
                 break;
             case Constant.SPECIAL_2:
-                Toast.makeText(this, "SPECIAL 2 : "+specialItem.getProd(), Toast.LENGTH_SHORT).show();
-                btn_special2_opt.setText(specialItem.getProd()+" Cheese");
+                Toast.makeText(this, "SPECIAL 2 : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
+                btn_special2_opt.setText(specialItem.getProd() + " Cheese");
                 break;
             default:
-                Toast.makeText(this, "Special Type Not found for : "+specialItem.getProd(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Special Type Not found for : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -300,5 +405,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     @Override
     public void onGiftCardSelectedListener(BillModel bill) {
         billAdapter.addItem(bill);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressed) {
+            super.onBackPressed();
+        }
+        backPressed = true;
+        Toast.makeText(this, "Press back again to exit.", Toast.LENGTH_SHORT).show();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                backPressed = false;
+            }
+        }, 2000);
     }
 }

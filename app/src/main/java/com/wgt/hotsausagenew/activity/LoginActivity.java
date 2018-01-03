@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         //database.userDAO().removeAllUsers();
 
         //initialise Login table if empty
-        //initialiseLoginTable();
+        initialiseLoginTable();
     }
 
     @OnTouch(R.id.btn_login)
@@ -64,13 +64,22 @@ public class LoginActivity extends AppCompatActivity {
             button.setBackgroundResource(R.drawable.login_button_pressed);
         else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
             button.setBackgroundResource(R.drawable.login_button);
-            Toast.makeText(this, "Clicked login", Toast.LENGTH_SHORT).show();
-            UserModel userModel = authenticateUser(eT_username.getText().toString(), eT_password.getText().toString());
-            //if(userModel!=null)
-            {
+            //Toast.makeText(this, "Clicked login", Toast.LENGTH_SHORT).show();
+            String uname = eT_username.getText().toString();
+            String pass = eT_password.getText().toString();
+            if (validateData(uname, pass)) {
+                UserModel userModel = authenticateUser(uname, pass);
+                if(userModel!=null){
+                    Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("username", userModel.username);
+                    intent.putExtra("site", userModel.site);
+                    startActivity(intent);
+                    finish();
 
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                } else {
+                    Toast.makeText(this, "ERROR : Login failed\nusername or password is incorrect", Toast.LENGTH_SHORT).show();
+                }
             }
         }
         return false;
@@ -148,8 +157,8 @@ public class LoginActivity extends AppCompatActivity {
         if (size == 0)//db userModel table is empty. So, add data
         {
             database.userDAO().addUser(
-                    new UserModel("dev", "dev123", "devSite", 0),
-                    new UserModel("marketstreet", "market123", "marketSite", 0)
+                    new UserModel("dev", "dev123", "devSite", 0)
+                    //new UserModel("marketstreet", "market123", "marketSite", 0)
 //                ,
 //                new UserModel("user","pwd","sitez",0),
 //                new UserModel("user","pwd","sitez",0),
@@ -171,14 +180,22 @@ public class LoginActivity extends AppCompatActivity {
 
     private UserModel authenticateUser(String username, String password) {
         UserModel userModel = null;
-//        if (database != null) {
-//            userModel = database.userDAO().getUser(username, password);
-//            if (userModel == null)
-//                Toast.makeText(this, "No user found", Toast.LENGTH_SHORT).show();
-//            else
-//                Toast.makeText(this, "Welcome " + userModel.site, Toast.LENGTH_SHORT).show();
-//            //TODO: use data in next activities
-//        }
+        if (database != null) {
+            userModel = database.userDAO().getUser(username, password);
+        }
         return userModel;
+    }
+
+    private boolean validateData(String username, String password) {
+        if (username.length()<1){
+            Toast.makeText(this, "ERROR : Provide Username", Toast.LENGTH_SHORT).show();
+            eT_username.requestFocus();
+            return false;
+        } else if (password.length() < 1){
+            Toast.makeText(this, "ERROR : Provide Password", Toast.LENGTH_SHORT).show();
+            eT_password.requestFocus();
+            return false;
+        }
+        return true;
     }
 }

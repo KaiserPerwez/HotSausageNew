@@ -33,15 +33,18 @@ public class Constant {
     public static final int KEY_FOOTLONG_SAUSAGE = 13;
 
     private static HashMap<Integer, Double> productPriceMap = new HashMap<>();
+    private static List<SpecialItemModel> specialList1 = new ArrayList<>();
+    private static List<SpecialItemModel> specialList2 = new ArrayList<>();
 
-    static {
+    static //to load data automatically when class loads. It removes the requirement to invoke a function to initialise them
+    {
         productPriceMap.put(KEY_REGULAR, 120.00);
         productPriceMap.put(KEY_LARGE, 220.00);
         productPriceMap.put(KEY_FOOTLONG, 65.00);
         productPriceMap.put(KEY_REGULAR_CHEESE, 150.00);
         productPriceMap.put(KEY_LARGE_CHEESE, 250.00);
-        productPriceMap.put(KEY_SPECIAL_1_CHEESE, 100.00);
-        productPriceMap.put(KEY_SPECIAL_2_CHEESE, 100.00);
+        productPriceMap.put(KEY_SPECIAL_1_CHEESE, 0.00);
+        productPriceMap.put(KEY_SPECIAL_2_CHEESE, 0.00);
         productPriceMap.put(KEY_FOOTLONG_CHEESE, 160.00);
         productPriceMap.put(KEY_DRINK, 50.00);
         productPriceMap.put(KEY_EXTRA_CHEESE, 70.00);
@@ -53,9 +56,6 @@ public class Constant {
     public static double getPriceOfKeyItem(int key) {
         return productPriceMap.get(key);
     }
-
-    private static List<SpecialItemModel> specialList1 = new ArrayList<>();
-    private static List<SpecialItemModel> specialList2 = new ArrayList<>();
 
     public static List<SpecialItemModel> getSpecialItemList(String specialType) {
         switch (specialType) {

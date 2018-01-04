@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_maroon"
     tools:context="com.wgt.hotsausagenew.activity.PaymentActivity">
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
@@ -18,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="289dp"
         android:layout_height="wrap_content"
         android:background="@drawable/text_field"
@@ -34,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Total"
+            android:text="Total(£)"
             android:textColor="@android:color/black"
             android:textSize="@dimen/normal_text_size" />
 
@@ -43,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="£9.10"
+            android:text="0.0"
             android:textColor="@android:color/black"
             android:textSize="@dimen/normal_text_size" />
 
@@ -60,12 +62,12 @@
         android:text="=Total"
         android:textColor="@android:color/black"
         android:textSize="@dimen/normal_text_size"
-        app:layout_constraintBottom_toBottomOf="@+id/tV_pound_5"
+        app:layout_constraintBottom_toBottomOf="@+id/tV_round_to_next_pound"
         app:layout_constraintDimensionRatio="w,16:1"
         app:layout_constraintEnd_toStartOf="@+id/tV_round_to_next_pound"
-        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tV_pound_5" />
+        app:layout_constraintTop_toTopOf="@+id/tV_round_to_next_pound" />
 
     <TextView
         android:id="@+id/tV_round_to_next_pound"
@@ -78,14 +80,33 @@
         android:text="=Round to\nnext pound\nfrom total"
         android:textColor="@android:color/black"
         android:textSize="@dimen/normal_text_size"
-        app:layout_constraintBottom_toBottomOf="@+id/tV_pound_5"
-        app:layout_constraintEnd_toStartOf="@+id/tV_pound_5"
+        app:layout_constraintBottom_toBottomOf="@+id/tV_pound_1"
+        app:layout_constraintEnd_toStartOf="@+id/tV_pound_1"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tV_total"
-        app:layout_constraintTop_toTopOf="@+id/tV_pound_5" />
+        app:layout_constraintTop_toTopOf="@+id/tV_pound_1" />
+
 
     <TextView
-        android:id="@+id/tV_pound_5"
+        android:id="@+id/tV_pound_1"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_margin="5dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/currency_button"
+        android:gravity="center"
+        android:text="£1"
+        android:textColor="@android:color/black"
+
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/tV_pound_2"
+        app:layout_constraintEnd_toStartOf="@+id/tV_pound_2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tV_round_to_next_pound"
+        app:layout_constraintTop_toTopOf="@+id/tV_pound_2" />
+
+    <TextView
+        android:id="@+id/tV_pound_2"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:layout_margin="5dp"
@@ -93,22 +114,40 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/currency_button"
         android:gravity="center"
-        android:text="£5"
+        android:text="£2"
+
         android:textColor="@android:color/black"
         android:textSize="@dimen/normal_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tV_pound_5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tV_pound_1"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.145" />
+
+    <TextView
+        android:id="@+id/tV_pound_5"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:layout_margin="5dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/currency_button"
+        android:gravity="center"
+        android:text="£5"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/normal_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/tV_pound_2"
         app:layout_constraintEnd_toStartOf="@+id/tV_pound_10"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tV_round_to_next_pound"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.13999999" />
+        app:layout_constraintStart_toEndOf="@+id/tV_pound_2"
+        app:layout_constraintTop_toTopOf="@+id/tV_pound_2" />
 
     <TextView
         android:id="@+id/tV_pound_10"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:layout_margin="5dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/currency_button"
         android:gravity="center"
         android:text="£10"
@@ -131,11 +170,11 @@
         android:text="£20"
         android:textColor="@android:color/black"
         android:textSize="@dimen/normal_text_size"
-        app:layout_constraintBottom_toBottomOf="@+id/tV_pound_5"
+        app:layout_constraintBottom_toBottomOf="@+id/tV_pound_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tV_pound_10"
-        app:layout_constraintTop_toTopOf="@+id/tV_pound_5" />
+        app:layout_constraintTop_toTopOf="@+id/tV_pound_10" />
 
     <TableLayout
         android:id="@+id/tableLayout2"
@@ -146,7 +185,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tV_pound_5"
+        app:layout_constraintTop_toBottomOf="@+id/tV_pound_2"
         app:layout_constraintVertical_bias="0.050000012">
 
         <TableRow>
@@ -268,7 +307,7 @@
         android:text="Card"
         android:textSize="@dimen/normal_text_size"
         app:layout_constraintBottom_toBottomOf="@+id/tV_amt_paid"
-        app:layout_constraintStart_toStartOf="@+id/tV_total"
+        app:layout_constraintStart_toEndOf="@+id/tV_total"
         app:layout_constraintTop_toTopOf="@+id/tV_amt_paid" />
 
     <Button
@@ -281,7 +320,7 @@
         android:text="Change"
         android:textSize="@dimen/normal_text_size"
         app:layout_constraintBottom_toBottomOf="@+id/tV_amt_paid"
-        app:layout_constraintEnd_toEndOf="@+id/tV_pound_20"
+        app:layout_constraintEnd_toEndOf="@+id/tV_pound_10"
         app:layout_constraintTop_toTopOf="@+id/tV_amt_paid" />
 
     <TextView
@@ -290,14 +329,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/calculator_total_button"
         android:gravity="right|center"
         android:paddingRight="30dp"
-        android:text="10.20"
+        android:text="0.00"
         android:textColor="@android:color/black"
         android:textSize="@dimen/normal_text_size"
         app:layout_constraintEnd_toEndOf="@+id/tableLayout2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tableLayout2"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout2" />
 </android.support.constraint.ConstraintLayout>

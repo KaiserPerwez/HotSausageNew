@@ -130,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Total"
+                android:text="Total(£)"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -140,7 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="00.0"
+                android:text="0.0"
                 android:textColor="@color/bg_maroon"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Discount (%)"
+                android:text="Discount(£)"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -166,7 +166,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="00.0"
+                android:text="0.0"
                 android:textColor="@color/bg_maroon"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -188,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Payable"
+                android:text="Payable(£)"
                 android:textColor="@android:color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -198,7 +198,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="£00.0"
+                android:text="0.0"
                 android:textColor="@color/bg_maroon"
                 android:textSize="24sp"
                 android:textStyle="bold" />

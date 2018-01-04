@@ -66,19 +66,19 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
                 notifyItemChanged(position);
                 //rv.scrollToPosition(position);//allow auto-scroll to item at pos
                 if (listener != null) {
-                    listener.onBillAdded(bill.getRate());
+                    listener.onBillAdded(bill);
                 }
                 return;
             }
         }
 
         // nothing matched.. add new bill
-        list.add(new BillModel(bill.getProduct(), 1, bill.getRate()));
+        list.add(new BillModel(bill.getProduct(), 1, bill.getRate(), bill.getId()));
         notifyItemInserted(list.size());
         //rv.scrollToPosition(list.size());//allow auto-scroll to item at pos
 
         if (listener != null) {
-            listener.onBillAdded(bill.getRate());
+            listener.onBillAdded(bill);
         }
         return;
     }
@@ -106,7 +106,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         rv.scrollToPosition(position);//allow auto-scroll to item at pos
 
         if (listener != null) {
-            listener.onBillAdded(item.getRate());
+            listener.onBillAdded(item);
         }
     }
 //-----------------------------------------------------------------------------------------------------//
@@ -116,7 +116,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     }
 
     public interface BillAddedListener {
-        void onBillAdded(double price);
+        void onBillAdded(BillModel billModel);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

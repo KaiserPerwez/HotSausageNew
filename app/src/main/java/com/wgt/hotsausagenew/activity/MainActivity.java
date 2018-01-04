@@ -118,6 +118,8 @@ public class MainActivity
     private Handler handler;
     private boolean backPressed = false;
 
+    private double discountPercentage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,8 +142,14 @@ public class MainActivity
 
             // remove the item from recycler view
             billAdapter.removeItem(viewHolder.getAdapterPosition());
-            changePrice(-deletedItem.getRate(), 0);
 
+            // update billing Amount
+            changePrice(-deletedItem.getRate(), deletedItem.getId());
+
+            if (billAdapter.getItemCount() == 0) {
+                discountPercentage = 0;
+                toggleSaverButton(true);
+            }
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
                     .make(rV_billing_list, name + " removed from list!", Snackbar.LENGTH_LONG)
@@ -156,8 +164,25 @@ public class MainActivity
         }
     }
 
-    @OnTouch({R.id.btn_regular, R.id.btn_reg_cheese, R.id.btn_save_50, R.id.btn_reg_sausage,         //touch column1
-            R.id.btn_large, R.id.btn_large_cheese, R.id.btn_save_100, R.id.btn_large_sausage,      //touch column2
+    @OnTouch({R.id.btn_save_50, R.id.btn_save_100})
+    public boolean onSaverButtonPressedButton(Button button, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            button.setBackgroundResource(R.drawable.pressed_button);
+        } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            if (button.getId() == R.id.btn_save_50) {
+                discountPercentage = 0.5;
+                toggleSaverButton(false);
+            } else if (button.getId() == R.id.btn_save_100) {
+                discountPercentage = 1;
+                toggleSaverButton(false);
+            }
+        }
+
+        return false;
+    }
+
+    @OnTouch({R.id.btn_regular, R.id.btn_reg_cheese, R.id.btn_reg_sausage,         //touch column1
+            R.id.btn_large, R.id.btn_large_cheese, R.id.btn_large_sausage,      //touch column2
             R.id.btn_special_1, R.id.btn_special1_opt, R.id.btn_drink, R.id.btn_footlong_sausage,  //touch column3
             R.id.btn_special_2, R.id.btn_special2_opt, R.id.btn_extra_cheese, R.id.btn_gift_sale,  //touch column4
             R.id.btn_footlong, R.id.btn_footlong_cheese, R.id.btn_discount, R.id.btn_gift_used     //touch column5
@@ -174,7 +199,8 @@ public class MainActivity
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_REGULAR)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_REGULAR),
+                                    R.id.btn_regular
                             )
                     );
                 } else if (button.getId() == R.id.btn_large) {
@@ -182,7 +208,8 @@ public class MainActivity
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_LARGE)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_LARGE),
+                                    R.id.btn_large
                             )
                     );
                 } else if (button.getId()==R.id.btn_footlong) {
@@ -190,7 +217,8 @@ public class MainActivity
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_FOOTLONG)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_FOOTLONG),
+                                    R.id.btn_footlong
                             )
                     );
                 }else if (button.getId()==R.id.btn_reg_cheese) {
@@ -198,7 +226,8 @@ public class MainActivity
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_REGULAR_CHEESE)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_REGULAR_CHEESE),
+                                    R.id.btn_reg_cheese
                             )
                     );
                 } else if (button.getId()==R.id.btn_large_cheese) {
@@ -206,7 +235,8 @@ public class MainActivity
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_LARGE_CHEESE)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_LARGE_CHEESE),
+                                    R.id.btn_large_cheese
                             )
                     );
                 } else if (button.getId()==R.id.btn_special1_opt) {
@@ -217,7 +247,8 @@ public class MainActivity
                                     Constant.getPriceOfItem(
                                             button.getText().toString().split(" ")[0],
                                             Constant.SPECIAL_1 //base price
-                                    )+Constant.getPriceOfKeyItem(Constant.KEY_SPECIAL_1_CHEESE) //additional charges for cheese
+                                    ) + Constant.getPriceOfKeyItem(Constant.KEY_SPECIAL_1_CHEESE), //additional charges for cheese
+                                    R.id.btn_special1_opt
                             )
                     );
                 }else if (button.getId()==R.id.btn_special2_opt) {
@@ -228,19 +259,21 @@ public class MainActivity
                                     Constant.getPriceOfItem(
                                             button.getText().toString().split(" ")[0],
                                             Constant.SPECIAL_2
-                                    )+Constant.getPriceOfKeyItem(Constant.KEY_SPECIAL_2_CHEESE)
+                                    ) + Constant.getPriceOfKeyItem(Constant.KEY_SPECIAL_2_CHEESE),
+                                    R.id.btn_special2_opt
                             )
                     );
                 } else if (button.getId() == R.id.btn_save_50) {
-                    changePrice(0, 50);
+                    discountPercentage = .5;
                 } else if (button.getId() == R.id.btn_save_100) {
-                    changePrice(0, 100);
+                    discountPercentage = 1;
                 } else if (button.getId()==R.id.btn_footlong_cheese) {
                     billAdapter.addItem(
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_FOOTLONG_CHEESE)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_FOOTLONG_CHEESE),
+                                    R.id.btn_footlong_cheese
                             )
                     );
                 } else if (button.getId()==R.id.btn_drink) {
@@ -248,7 +281,8 @@ public class MainActivity
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_DRINK)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_DRINK),
+                                    R.id.btn_drink
                             )
                     );
                 } else if (button.getId()==R.id.btn_extra_cheese) {
@@ -256,7 +290,8 @@ public class MainActivity
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_EXTRA_CHEESE)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_EXTRA_CHEESE),
+                                    R.id.btn_extra_cheese
                             )
                     );
                 } else if (button.getId()==R.id.btn_reg_sausage) {
@@ -264,7 +299,8 @@ public class MainActivity
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_REGULAR_SAUSAGE)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_REGULAR_SAUSAGE),
+                                    R.id.btn_reg_sausage
                             )
                     );
                 } else if (button.getId()==R.id.btn_large_sausage) {
@@ -272,7 +308,8 @@ public class MainActivity
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_LARGE_SAUSAGE)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_LARGE_SAUSAGE),
+                                    R.id.btn_large_sausage
                             )
                     );
                 } else if (button.getId()==R.id.btn_footlong_sausage) {
@@ -280,17 +317,14 @@ public class MainActivity
                             new BillModel(
                                     button.getText().toString(),
                                     1,
-                                    Constant.getPriceOfKeyItem(Constant.KEY_FOOTLONG_SAUSAGE)
+                                    Constant.getPriceOfKeyItem(Constant.KEY_FOOTLONG_SAUSAGE),
+                                    R.id.btn_footlong_sausage
                             )
                     );
                 }/*else if (button.getText().toString().equalsIgnoreCase("Special1"))
                     billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_1)));
                 else if (button.getText().toString().equalsIgnoreCase("Special2"))
-                    billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));*/ else if (button.getText().toString().equalsIgnoreCase("50% Saver")) {
-                    //TODO:Implement 50% off on total amt
-                } else if (button.getText().toString().equalsIgnoreCase("100% Saver")) {
-                    //TODO:set total amt to be zero
-                } else if (button.getText().toString().equalsIgnoreCase("GiftCard Used")) {
+                    billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));*/ else if (button.getId() == R.id.btn_gift_sale) {
                     GiftCardDialogUtils giftCardDialogUtils = new GiftCardDialogUtils(this, this);
                     giftCardDialogUtils.showDialog();
                 } else if (button.getText().toString().equalsIgnoreCase("Discounts")) {
@@ -311,6 +345,10 @@ public class MainActivity
         tV_total_amount.setText("" + 0.00);
         tV_discount_amount.setText("" + 0.00);
         tV_payable_amount.setText("" + 0.00);
+        discountPercentage = 0; // reset discountPercentage
+        if (billAdapter.getItemCount() == 0) {
+            toggleSaverButton(true);
+        }
         Toast.makeText(this, "Cleared bill pane", Toast.LENGTH_SHORT).show();
     }
 
@@ -415,7 +453,7 @@ public class MainActivity
 
     @Override
     public void onDiscountselected(DiscountModel discount) {
-        billAdapter.addItem(new BillModel(discount.getProduct(), 1, discount.getRate()));
+        billAdapter.addItem(new BillModel(discount.getProduct(), 1, discount.getRate(), R.id.btn_discount));
     }
 
     @Override
@@ -438,51 +476,52 @@ public class MainActivity
         }, 2000);
     }
 
-    // handle total price and discount ( adding price and discount at same time will not work. )
-    private void changePrice(double price, double discountPercentage) {
+
+    private void changePrice(double price, int itemKey) {
         try {
             double oldPrice = Double.parseDouble(tV_total_amount.getText().toString());
             double oldDiscount = Double.parseDouble(tV_discount_amount.getText().toString());
-            double currentTotal = oldPrice + price;
+            double payable = Double.parseDouble(tV_payable_amount.getText().toString());
 
-
-            if (price > 0 && discountPercentage > 0) {
-                Toast.makeText(this, "Adding Price and Discount at same time is not applicable", Toast.LENGTH_SHORT).show();
-                return;
+            if (discountPercentage > 0) { // discount is applied
+                tV_total_amount.setText("" + (oldPrice + price));
+                if (Constant.checkNonDiscountability(itemKey)) {
+                    // NON-Discountable
+                    double currentTotal = oldPrice + price;
+                    tV_total_amount.setText("" + (oldPrice + price));
+                    tV_payable_amount.setText("" + (payable + price));
+                } else {
+                    //Discountable
+                    double currP = oldPrice + price;
+                    double discP = price * discountPercentage;
+                    double payP = price - discP;
+                    tV_total_amount.setText("" + currP);
+                    tV_discount_amount.setText("" + (oldDiscount + discP));
+                    tV_payable_amount.setText("" + (payable + payP));
+                }
+            } else { // discount is not applied, normal charges applied
+                tV_total_amount.setText("" + (oldPrice + price));
+                tV_payable_amount.setText("" + (payable + price));
             }
 
-            if (discountPercentage < 1) { // not a discount.. just add price
-                if (oldDiscount > 0) { // already a discount is added.. calculate payable amount
-                    double disAmt = (currentTotal * oldDiscount) / 100;
-                    tV_total_amount.setText("" + currentTotal);
-                    tV_payable_amount.setText(Constant.poundSign + (currentTotal - disAmt));
-                    return;
-                }
 
-                //no discount is added. add price as it is..
-                tV_total_amount.setText("" + currentTotal);
-                tV_payable_amount.setText(Constant.poundSign + currentTotal);
-
-
-            } else { // discount calculation
-                if (oldDiscount < 1 || oldDiscount < discountPercentage) { // 1st time discount is applying || discount is increasing
-                    double discountAmount = (oldPrice * discountPercentage) / 100;
-                    tV_discount_amount.setText("" + discountPercentage);
-                    tV_payable_amount.setText(Constant.poundSign + (oldPrice - discountAmount));
-                } else if (oldDiscount > discountPercentage) {
-                    Toast.makeText(this, "Lower Discount is Not Applicable", Toast.LENGTH_SHORT).show();
-                } else if (oldDiscount == discountPercentage) {
-                    Toast.makeText(this, discountPercentage + "% discount is already applied", Toast.LENGTH_SHORT).show();
-                }
-
-            }
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "ERROR : billing Pane Data error\n", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "ERROR : billing Pane Data error\nTD : " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void onBillAdded(double price) {
-        changePrice(price, 0);
+    public void onBillAdded(BillModel billModel) {
+        toggleSaverButton(false);
+        changePrice(billModel.getRate(), billModel.getId());
+    }
+
+    private void toggleSaverButton(boolean enable) {
+        btn_save_50.setEnabled(enable);
+        btn_save_100.setEnabled(enable);
+        if (enable) {
+            btn_save_50.setBackgroundResource(R.drawable.raised_button);
+            btn_save_100.setBackgroundResource(R.drawable.raised_button);
+        }
     }
 }

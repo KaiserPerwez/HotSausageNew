@@ -38,7 +38,7 @@ public class TransactionActivity extends AppCompatActivity {
         listOfTrans = new ArrayList<>();
 
         for(int i=0; i<productList.length;i++) {
-            listOfBills.add(new BillModel(productList[i], quantityList[i], priceList[i]));
+            listOfBills.add(new BillModel(productList[i], quantityList[i], priceList[i], 0));
         }
         for (int i=0; i<times.length;i++) {
             listOfTrans.add(new TransactionModel(times[i], sales[i], amounts[i], discounts[i], listOfBills));

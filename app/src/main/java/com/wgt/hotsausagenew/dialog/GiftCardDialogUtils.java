@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.model.BillModel;
-import com.wgt.hotsausagenew.model.DiscountModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,21 +28,14 @@ import butterknife.OnClick;
 
 public class GiftCardDialogUtils {
 
-    private GiftCardSelectedListener listener;
-    private Context context;
-    private Dialog dialog;
-
     @BindView(R.id.dialog_title)
     TextView dialog_title;
-
     @BindView(R.id.dialog_header_col_1)
     TextView dialog_header_col_1;
     @BindView(R.id.dialog_header_col_2)
     TextView dialog_header_col_2;
     @BindView(R.id.dialog_header_col_3)
     TextView dialog_header_col_3;
-
-
     @BindView(R.id.dialog_iV_add)
     ImageView dialog_iV_add;
     @BindView(R.id.dialog_add_panel)
@@ -64,6 +56,9 @@ public class GiftCardDialogUtils {
     LinearLayout dialog_header;
     @BindView(R.id.dialog_listview)
     ListView dialog_listview;
+    private GiftCardSelectedListener listener;
+    private Context context;
+    private Dialog dialog;
 
     public GiftCardDialogUtils(GiftCardSelectedListener listener, Context context) {
         this.listener = listener;
@@ -103,7 +98,7 @@ public class GiftCardDialogUtils {
                 dialog_et_col_2.requestFocus();
                 throw new Exception("Provide correct Price");
             }
-            billModel = new BillModel(name, 1, price);
+            billModel = new BillModel(name, 1, price, R.id.btn_gift_sale);
         }catch (NumberFormatException e) {
             dialog_et_col_2.requestFocus();
             Toast.makeText(context, "ERROR : Provide correct price", Toast.LENGTH_SHORT).show();

@@ -3,6 +3,7 @@ package com.wgt.hotsausagenew.utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.model.SpecialItemModel;
 
 import java.util.ArrayList;
@@ -33,7 +34,22 @@ public class Constant {
     public static final int KEY_FOOTLONG_SAUSAGE = 13;
 
     private static HashMap<Integer, Double> productPriceMap = new HashMap<>();
+    private static List<Integer> nonDiscountableItemList = new ArrayList<>();
+    private static List<SpecialItemModel> specialList1 = new ArrayList<>();
+    private static List<SpecialItemModel> specialList2 = new ArrayList<>();
 
+    // which items will not be discountable
+    static {
+        nonDiscountableItemList.add(R.id.btn_extra_cheese);
+        nonDiscountableItemList.add(R.id.btn_reg_sausage);
+        nonDiscountableItemList.add(R.id.btn_large_sausage);
+        nonDiscountableItemList.add(R.id.btn_footlong_sausage);
+        nonDiscountableItemList.add(R.id.btn_discount);
+        nonDiscountableItemList.add(R.id.btn_gift_sale);
+        nonDiscountableItemList.add(R.id.btn_gift_used);
+    }
+
+    // price list of each product
     static {
         productPriceMap.put(KEY_REGULAR, 120.00);
         productPriceMap.put(KEY_LARGE, 220.00);
@@ -45,17 +61,18 @@ public class Constant {
         productPriceMap.put(KEY_FOOTLONG_CHEESE, 160.00);
         productPriceMap.put(KEY_DRINK, 50.00);
         productPriceMap.put(KEY_EXTRA_CHEESE, 70.00);
-        productPriceMap.put(KEY_REGULAR_SAUSAGE, 75.00);
-        productPriceMap.put(KEY_LARGE_SAUSAGE, 130.00);
-        productPriceMap.put(KEY_FOOTLONG_SAUSAGE, 120.00);
+        productPriceMap.put(KEY_REGULAR_SAUSAGE, 1.50);
+        productPriceMap.put(KEY_LARGE_SAUSAGE, 2.00);
+        productPriceMap.put(KEY_FOOTLONG_SAUSAGE, 2.50);
+    }
+
+    public static boolean checkNonDiscountability(int itemID) {
+        return nonDiscountableItemList.contains(itemID);
     }
 
     public static double getPriceOfKeyItem(int key) {
         return productPriceMap.get(key);
     }
-
-    private static List<SpecialItemModel> specialList1 = new ArrayList<>();
-    private static List<SpecialItemModel> specialList2 = new ArrayList<>();
 
     public static List<SpecialItemModel> getSpecialItemList(String specialType) {
         switch (specialType) {

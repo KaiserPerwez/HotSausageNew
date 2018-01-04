@@ -8,14 +8,22 @@ public class BillModel {
     private String product;
     private int quantity;
     private double rate;
+    private int id;
 
     public BillModel() {
     }
 
-    public BillModel(String product, int quantity, double rate) {
+    /*public BillModel(String product, int quantity, double rate) {
         this.product = product;
         this.quantity = quantity;
         this.rate = rate;
+    }*/
+
+    public BillModel(String product, int quantity, double rate, int id) {
+        this.product = product;
+        this.quantity = quantity;
+        this.rate = rate;
+        this.id = id;
     }
 
     public String getProduct() {
@@ -40,5 +48,13 @@ public class BillModel {
 
     public void setRate(double rate) {
         this.rate = rate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

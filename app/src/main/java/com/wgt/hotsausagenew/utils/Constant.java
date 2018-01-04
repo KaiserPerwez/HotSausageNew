@@ -34,9 +34,24 @@ public class Constant {
     public static final int KEY_FOOTLONG_SAUSAGE = 13;
 
     private static HashMap<Integer, Double> productPriceMap = new HashMap<>();
+    static // price list of each product
+    {
+        productPriceMap.put(KEY_REGULAR, 120.00);
+        productPriceMap.put(KEY_LARGE, 220.00);
+        productPriceMap.put(KEY_FOOTLONG, 65.00);
+        productPriceMap.put(KEY_REGULAR_CHEESE, 150.00);
+        productPriceMap.put(KEY_LARGE_CHEESE, 250.00);
+        productPriceMap.put(KEY_SPECIAL_1_CHEESE, 0.00);
+        productPriceMap.put(KEY_SPECIAL_2_CHEESE, 0.00);
+        productPriceMap.put(KEY_FOOTLONG_CHEESE, 160.00);
+        productPriceMap.put(KEY_DRINK, 50.00);
+        productPriceMap.put(KEY_EXTRA_CHEESE, 70.00);
+        productPriceMap.put(KEY_REGULAR_SAUSAGE, 1.50);
+        productPriceMap.put(KEY_LARGE_SAUSAGE, 2.00);
+        productPriceMap.put(KEY_FOOTLONG_SAUSAGE, 2.50);
+    }
+
     private static List<Integer> nonDiscountableItemList = new ArrayList<>();
-    private static List<SpecialItemModel> specialList1 = new ArrayList<>();
-    private static List<SpecialItemModel> specialList2 = new ArrayList<>();
 
     // which items will not be discountable
     static {
@@ -49,22 +64,8 @@ public class Constant {
         nonDiscountableItemList.add(R.id.btn_gift_used);
     }
 
-    // price list of each product
-    static {
-        productPriceMap.put(KEY_REGULAR, 120.00);
-        productPriceMap.put(KEY_LARGE, 220.00);
-        productPriceMap.put(KEY_FOOTLONG, 65.00);
-        productPriceMap.put(KEY_REGULAR_CHEESE, 150.00);
-        productPriceMap.put(KEY_LARGE_CHEESE, 250.00);
-        productPriceMap.put(KEY_SPECIAL_1_CHEESE, 100.00);
-        productPriceMap.put(KEY_SPECIAL_2_CHEESE, 100.00);
-        productPriceMap.put(KEY_FOOTLONG_CHEESE, 160.00);
-        productPriceMap.put(KEY_DRINK, 50.00);
-        productPriceMap.put(KEY_EXTRA_CHEESE, 70.00);
-        productPriceMap.put(KEY_REGULAR_SAUSAGE, 1.50);
-        productPriceMap.put(KEY_LARGE_SAUSAGE, 2.00);
-        productPriceMap.put(KEY_FOOTLONG_SAUSAGE, 2.50);
-    }
+
+
 
     public static boolean checkNonDiscountability(int itemID) {
         return nonDiscountableItemList.contains(itemID);
@@ -73,6 +74,9 @@ public class Constant {
     public static double getPriceOfKeyItem(int key) {
         return productPriceMap.get(key);
     }
+
+    private static List<SpecialItemModel> specialList1 = new ArrayList<>();
+    private static List<SpecialItemModel> specialList2 = new ArrayList<>();
 
     public static List<SpecialItemModel> getSpecialItemList(String specialType) {
         switch (specialType) {

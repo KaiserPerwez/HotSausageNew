@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     private List<BillModel> list;
     private RecyclerView rv;
+    private BillAddedListener listener;
     public BillAdapter() {
         this.list = new ArrayList<>();
     }
@@ -64,6 +65,9 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
                 item.setRate(item.getRate() + bill.getRate());
                 notifyItemChanged(position);
                 //rv.scrollToPosition(position);//allow auto-scroll to item at pos
+                if (listener != null) {
+                    listener.onBillAdded(bill.getRate());
+                }
                 return;
             }
         }
@@ -72,6 +76,10 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         list.add(new BillModel(bill.getProduct(), 1, bill.getRate()));
         notifyItemInserted(list.size());
         //rv.scrollToPosition(list.size());//allow auto-scroll to item at pos
+
+        if (listener != null) {
+            listener.onBillAdded(bill.getRate());
+        }
         return;
     }
 
@@ -96,8 +104,20 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         // NOTE: don't call notifyDataSetChanged()
         notifyItemInserted(position);
         rv.scrollToPosition(position);//allow auto-scroll to item at pos
+
+        if (listener != null) {
+            listener.onBillAdded(item.getRate());
+        }
     }
 //-----------------------------------------------------------------------------------------------------//
+
+    public void setBillAddedListener(BillAddedListener listener) {
+        this.listener = listener;
+    }
+
+    public interface BillAddedListener {
+        void onBillAdded(double price);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

@@ -38,7 +38,15 @@ import butterknife.OnClick;
 import butterknife.OnLongClick;
 import butterknife.OnTouch;
 
-public class MainActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, View.OnTouchListener, SpecialDialogUtil.SpecialDialogItemClickListener, DiscountDialogUtil.DiscountDialogListener, GiftCardDialogUtils.GiftCardSelectedListener {
+public class MainActivity
+        extends AppCompatActivity
+        implements
+        RecyclerItemTouchHelper.RecyclerItemTouchHelperListener,
+        View.OnTouchListener,
+        SpecialDialogUtil.SpecialDialogItemClickListener,
+        DiscountDialogUtil.DiscountDialogListener,
+        GiftCardDialogUtils.GiftCardSelectedListener,
+        BillAdapter.BillAddedListener {
 
     //column 1
     @BindView(R.id.btn_regular)
@@ -132,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
             // remove the item from recycler view
             billAdapter.removeItem(viewHolder.getAdapterPosition());
+            changePrice(-deletedItem.getRate(), 0);
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
@@ -222,6 +231,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
                                     )+Constant.getPriceOfKeyItem(Constant.KEY_SPECIAL_2_CHEESE)
                             )
                     );
+                } else if (button.getId() == R.id.btn_save_50) {
+                    changePrice(0, 50);
+                } else if (button.getId() == R.id.btn_save_100) {
+                    changePrice(0, 100);
                 } else if (button.getId()==R.id.btn_footlong_cheese) {
                     billAdapter.addItem(
                             new BillModel(
@@ -273,8 +286,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
                 }/*else if (button.getText().toString().equalsIgnoreCase("Special1"))
                     billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_1)));
                 else if (button.getText().toString().equalsIgnoreCase("Special2"))
-                    billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));*/
-                else if (button.getText().toString().equalsIgnoreCase("50% Saver")) {
+                    billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));*/ else if (button.getText().toString().equalsIgnoreCase("50% Saver")) {
                     //TODO:Implement 50% off on total amt
                 } else if (button.getText().toString().equalsIgnoreCase("100% Saver")) {
                     //TODO:set total amt to be zero
@@ -296,6 +308,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     @OnClick(R.id.iV_clearBill)
     public void clearBillPane() {
         billAdapter.removeAll();
+        tV_total_amount.setText("" + 0.00);
+        tV_discount_amount.setText("" + 0.00);
+        tV_payable_amount.setText("" + 0.00);
         Toast.makeText(this, "Cleared bill pane", Toast.LENGTH_SHORT).show();
     }
 
@@ -347,6 +362,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     private void InitialiseRecyclerViewWithAdapter() {
         billAdapter = new BillAdapter();
+        billAdapter.setBillAddedListener(this);
         rV_billing_list.setLayoutManager(new LinearLayoutManager(this));
         rV_billing_list.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         rV_billing_list.setAdapter(billAdapter);
@@ -420,5 +436,53 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
                 backPressed = false;
             }
         }, 2000);
+    }
+
+    // handle total price and discount ( adding price and discount at same time will not work. )
+    private void changePrice(double price, double discountPercentage) {
+        try {
+            double oldPrice = Double.parseDouble(tV_total_amount.getText().toString());
+            double oldDiscount = Double.parseDouble(tV_discount_amount.getText().toString());
+            double currentTotal = oldPrice + price;
+
+
+            if (price > 0 && discountPercentage > 0) {
+                Toast.makeText(this, "Adding Price and Discount at same time is not applicable", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (discountPercentage < 1) { // not a discount.. just add price
+                if (oldDiscount > 0) { // already a discount is added.. calculate payable amount
+                    double disAmt = (currentTotal * oldDiscount) / 100;
+                    tV_total_amount.setText("" + currentTotal);
+                    tV_payable_amount.setText(Constant.poundSign + (currentTotal - disAmt));
+                    return;
+                }
+
+                //no discount is added. add price as it is..
+                tV_total_amount.setText("" + currentTotal);
+                tV_payable_amount.setText(Constant.poundSign + currentTotal);
+
+
+            } else { // discount calculation
+                if (oldDiscount < 1 || oldDiscount < discountPercentage) { // 1st time discount is applying || discount is increasing
+                    double discountAmount = (oldPrice * discountPercentage) / 100;
+                    tV_discount_amount.setText("" + discountPercentage);
+                    tV_payable_amount.setText(Constant.poundSign + (oldPrice - discountAmount));
+                } else if (oldDiscount > discountPercentage) {
+                    Toast.makeText(this, "Lower Discount is Not Applicable", Toast.LENGTH_SHORT).show();
+                } else if (oldDiscount == discountPercentage) {
+                    Toast.makeText(this, discountPercentage + "% discount is already applied", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "ERROR : billing Pane Data error\n", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onBillAdded(double price) {
+        changePrice(price, 0);
     }
 }

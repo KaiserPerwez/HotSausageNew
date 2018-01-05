@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
     private List<BillModel> list;
     private RecyclerView rv;
+
     private BillAddedListener listener;
     public BillAdapter() {
         this.list = new ArrayList<>();
@@ -64,7 +65,8 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
                 item.setQuantity(item.getQuantity() + 1);
                 item.setRate(item.getRate() + bill.getRate());
                 notifyItemChanged(position);
-                //rv.scrollToPosition(position);//allow auto-scroll to item at pos
+                if (rv != null)
+                    rv.scrollToPosition(position);//allow auto-scroll to item at pos
                 if (listener != null) {
                     listener.onBillAdded(bill);
                 }
@@ -75,7 +77,8 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         // nothing matched.. add new bill
         list.add(new BillModel(bill.getProduct(), 1, bill.getRate(), bill.getId()));
         notifyItemInserted(list.size());
-        //rv.scrollToPosition(list.size());//allow auto-scroll to item at pos
+        if (rv != null)
+            rv.scrollToPosition(list.size());//allow auto-scroll to item at pos
 
         if (listener != null) {
             listener.onBillAdded(bill);

@@ -142,6 +142,7 @@ public class MainActivity
 
             // remove the item from recycler view
             billAdapter.removeItem(viewHolder.getAdapterPosition());
+            changePrice(-deletedItem.getRate(), 0);
 
             // update billing Amount
             changePrice(-deletedItem.getRate(), deletedItem.getId());
@@ -333,8 +334,9 @@ public class MainActivity
                     discountDialogUtil.showDialog();
                 }
 
-                longClicked = false;
+                //   longClicked = false;
             }
+            longClicked = false;
         }
         return false;
     }
@@ -354,13 +356,13 @@ public class MainActivity
 
     @OnClick(R.id.tV_payable_amount)
     public void goToPaymentScreen() {
-        startActivity(new Intent(this, PaymentActivity.class));
+        Intent intent = new Intent(this, PaymentActivity.class);
+        intent.putExtra("tV_payable_amount", tV_payable_amount.getText());
+        startActivity(intent);
     }
 
     @OnLongClick({R.id.btn_special_1, R.id.btn_special_2})
     public boolean special_LongClicked(Button button) {
-        Toast.makeText(this, "Long Clicked Special button" + button.getText(), Toast.LENGTH_SHORT).show();
-
         String key = "";
         if (button.getId() == R.id.btn_special_1) {
             key = Constant.SPECIAL_1;
@@ -441,10 +443,12 @@ public class MainActivity
             case Constant.SPECIAL_1:
                 Toast.makeText(this, "SPECIAL 1 : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
                 btn_special1_opt.setText(specialItem.getProd() + " Cheese");
+                btn_special_1.setText(specialItem.getProd());
                 break;
             case Constant.SPECIAL_2:
                 Toast.makeText(this, "SPECIAL 2 : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
                 btn_special2_opt.setText(specialItem.getProd() + " Cheese");
+                btn_special_2.setText(specialItem.getProd());
                 break;
             default:
                 Toast.makeText(this, "Special Type Not found for : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();

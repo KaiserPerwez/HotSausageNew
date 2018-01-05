@@ -142,7 +142,6 @@ public class MainActivity
 
             // remove the item from recycler view
             billAdapter.removeItem(viewHolder.getAdapterPosition());
-            changePrice(-deletedItem.getRate(), 0);
 
             // update billing Amount
             changePrice(-deletedItem.getRate(), deletedItem.getId());
@@ -241,24 +240,32 @@ public class MainActivity
                             )
                     );
                 } else if (button.getId()==R.id.btn_special1_opt) {
+                    if (button.getText().toString().equalsIgnoreCase("Special1 Cheese")) {
+                        Toast.makeText(this, "Please select a special item first", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                     billAdapter.addItem(
                             new BillModel(
                                     button.getText().toString(), //item name
                                     1, //quantity
                                     Constant.getPriceOfItem(
-                                            button.getText().toString().split(" ")[0],
+                                            getSpecialOptString(button.getText().toString()),
                                             Constant.SPECIAL_1 //base price
                                     ) + Constant.getPriceOfKeyItem(Constant.KEY_SPECIAL_1_CHEESE), //additional charges for cheese
                                     R.id.btn_special1_opt
                             )
                     );
                 }else if (button.getId()==R.id.btn_special2_opt) {
+                    if (button.getText().toString().equalsIgnoreCase("Special2 Cheese")) {
+                        Toast.makeText(this, "Please select a special item first", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
                     billAdapter.addItem(
                             new BillModel(
                                     button.getText().toString(),
                                     1,
                                     Constant.getPriceOfItem(
-                                            button.getText().toString().split(" ")[0],
+                                            getSpecialOptString(button.getText().toString()),
                                             Constant.SPECIAL_2
                                     ) + Constant.getPriceOfKeyItem(Constant.KEY_SPECIAL_2_CHEESE),
                                     R.id.btn_special2_opt
@@ -266,8 +273,10 @@ public class MainActivity
                     );
                 } else if (button.getId() == R.id.btn_save_50) {
                     discountPercentage = .5;
+                    Toast.makeText(this, "50% saver on", Toast.LENGTH_SHORT).show();
                 } else if (button.getId() == R.id.btn_save_100) {
                     discountPercentage = 1;
+                    Toast.makeText(this, "100% saver on", Toast.LENGTH_SHORT).show();
                 } else if (button.getId()==R.id.btn_footlong_cheese) {
                     billAdapter.addItem(
                             new BillModel(
@@ -322,10 +331,11 @@ public class MainActivity
                                     R.id.btn_footlong_sausage
                             )
                     );
-                }/*else if (button.getText().toString().equalsIgnoreCase("Special1"))
-                    billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_1)));
-                else if (button.getText().toString().equalsIgnoreCase("Special2"))
-                    billAdapter.addItem(new BillModel(button.getText().toString(), 1, Constant.getPriceOfItem(button.getText().toString(), Constant.SPECIAL_2)));*/ else if (button.getId() == R.id.btn_gift_sale) {
+                } else if (button.getId() == R.id.btn_special_1) {
+                    Toast.makeText(this, "Please long hold to get Special 1 Popup", Toast.LENGTH_SHORT).show();
+                } else if (button.getId() == R.id.btn_special_2) {
+                    Toast.makeText(this, "Please long hold to get Special 2 Popup", Toast.LENGTH_SHORT).show();
+                } else if (button.getId() == R.id.btn_gift_sale) {
                     GiftCardDialogUtils giftCardDialogUtils = new GiftCardDialogUtils(this, this);
                     giftCardDialogUtils.showDialog();
                 } else if (button.getText().toString().equalsIgnoreCase("Discounts")) {
@@ -339,6 +349,16 @@ public class MainActivity
             longClicked = false;
         }
         return false;
+    }
+
+    private String getSpecialOptString(String btnString) {
+        String returnString = "";
+        String arr[] = btnString.split(" ");
+        for (int i = 0; i < arr.length - 1; i++) {
+            returnString += arr[i];
+            returnString += " ";
+        }
+        return returnString.trim();
     }
 
     @OnClick(R.id.iV_clearBill)

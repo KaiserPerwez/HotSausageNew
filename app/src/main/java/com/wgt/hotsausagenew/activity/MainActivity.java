@@ -379,6 +379,7 @@ public class MainActivity
         Intent intent = new Intent(this, PaymentActivity.class);
         intent.putExtra("tV_payable_amount", tV_payable_amount.getText());
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_up);
     }
 
     @OnLongClick({R.id.btn_special_1, R.id.btn_special_2})

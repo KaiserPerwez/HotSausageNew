@@ -1,5 +1,6 @@
 package com.wgt.hotsausagenew.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -37,6 +38,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import butterknife.OnTouch;
+
 
 public class MainActivity
         extends AppCompatActivity
@@ -120,6 +122,8 @@ public class MainActivity
 
     private double discountPercentage;
 
+    //-----------------------------------------------Activity Functions Overridden------------//
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,41 +132,68 @@ public class MainActivity
         handler = new Handler();
         InitialiseRecyclerViewWithAdapter();
     }
-
-    //onSwipe implementation of RecyclerItemTouchHelperListener ie event on onSwiping of bill items to delete
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof BillAdapter.ViewHolder) {
-            // get the removed item name to display it in snack bar
-            String name = billAdapter.getItem(viewHolder.getAdapterPosition()).getProduct();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-            // backup of removed item for undo purpose
-            final BillModel deletedItem = billAdapter.getItem(viewHolder.getAdapterPosition());
-            final int deletedIndex = viewHolder.getAdapterPosition();
+        if (requestCode == Constant.REQUEST_CODE_PAYMENT_INTENT && resultCode == Activity.RESULT_OK) {
+            Toast.makeText(this, "Paid Via: " + data.getStringExtra(Constant.KEY_PAYMENT_MODE_INTENT), Toast.LENGTH_SHORT).show();
+//            final Dialog afterPayment_Dialog = new Dialog(this);// Create custom dialog object
+//            afterPayment_Dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//            afterPayment_Dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//            afterPayment_Dialog.setCancelable(true);
+//            afterPayment_Dialog.setContentView(R.layout.dialog_invoice);
+//
+//            afterPayment_Dialog.show();
+//
 
-            // remove the item from recycler view
-            billAdapter.removeItem(viewHolder.getAdapterPosition());
 
-            // update billing Amount
-            changePrice(-deletedItem.getRate(), deletedItem.getId());
+            //---------------send dialog to INvoiceDilaogUtil and procedd as we did for other dialog.
+            //Use listener to update database,last transaction,clear bill panel,etc
 
-            if (billAdapter.getItemCount() == 0) {
-                discountPercentage = 0;
-                toggleSaverButton(true);
-            }
-            // showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
-                    .make(rV_billing_list, name + " removed from list!", Snackbar.LENGTH_LONG)
-                    .setAction("UNDO", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            billAdapter.restoreDeletedItem(deletedItem, deletedIndex);
-                        }
-                    })
-                    .setActionTextColor(Color.WHITE);
-            snackbar.show();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressed) {
+            super.onBackPressed();
+        }
+        backPressed = true;
+        Toast.makeText(this, "Press back again to exit.", Toast.LENGTH_SHORT).show();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                backPressed = false;
+            }
+        }, 2000);
+    }
+
+    //hidden dialog buttons touched
+    @Override
+    public boolean onTouch(View v, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+            v.setBackgroundResource(R.drawable.card_button_pressed);
+        else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            v.setBackgroundResource(R.drawable.calculator_total_button);
+        }
+
+        int id = v.getId();
+        if (id == R.id.btn_sync)
+            Toast.makeText(this, "Syncing..", Toast.LENGTH_SHORT).show();
+        else if (id == R.id.btn_transaction) {
+            startActivityForResult(new Intent(this, TransactionActivity.class), Constant.REQUEST_CODE_TRANSACTION_INTENT);
+            finish();
+        } else if (id == R.id.btn_logout) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+
+
+        return false;
+    }
+
+    //-----------------------------------------------Buttenknife Overridden------------//
 
     @OnTouch({R.id.btn_save_50, R.id.btn_save_100})
     public boolean onSaverButtonPressedButton(Button button, MotionEvent motionEvent) {
@@ -351,15 +382,7 @@ public class MainActivity
         return false;
     }
 
-    private String getSpecialOptString(String btnString) {
-        String returnString = "";
-        String arr[] = btnString.split(" ");
-        for (int i = 0; i < arr.length - 1; i++) {
-            returnString += arr[i];
-            returnString += " ";
-        }
-        return returnString.trim();
-    }
+
 
     @OnClick(R.id.iV_clearBill)
     public void clearBillPane() {
@@ -377,8 +400,8 @@ public class MainActivity
     @OnClick(R.id.tV_payable_amount)
     public void goToPaymentScreen() {
         Intent intent = new Intent(this, PaymentActivity.class);
-        intent.putExtra("tV_payable_amount", tV_payable_amount.getText());
-        startActivity(intent);
+        intent.putExtra(Constant.KEY_PAYABLE_AMT_INTENT, tV_payable_amount.getText());
+        startActivityForResult(intent, Constant.REQUEST_CODE_PAYMENT_INTENT);
     }
 
     @OnLongClick({R.id.btn_special_1, R.id.btn_special_2})
@@ -418,45 +441,8 @@ public class MainActivity
         return false;
     }
 
-    //-----------------------------------------------------User defined Functions---------------------------//
 
-    private void InitialiseRecyclerViewWithAdapter() {
-        billAdapter = new BillAdapter();
-        billAdapter.setBillAddedListener(this);
-        rV_billing_list.setLayoutManager(new LinearLayoutManager(this));
-        rV_billing_list.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        rV_billing_list.setAdapter(billAdapter);
-
-        //enable swipe-to-delete interaction
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rV_billing_list);
-
-    }
-
-    //hidden dialog buttons touched
-    @Override
-    public boolean onTouch(View v, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-            v.setBackgroundResource(R.drawable.card_button_pressed);
-        else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            v.setBackgroundResource(R.drawable.calculator_total_button);
-        }
-
-        int id = v.getId();
-        if (id == R.id.btn_sync)
-            Toast.makeText(this, "Syncing..", Toast.LENGTH_SHORT).show();
-        else if (id == R.id.btn_transaction) {
-            startActivity(new Intent(this, TransactionActivity.class));
-            finish();
-        } else if (id == R.id.btn_logout) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        }
-
-
-        return false;
-    }
-
+    //----------------------------------Listener Callbacks------------------//
     @Override
     public void onSpecialItemClicked(String key, SpecialItemModel specialItem) {
         switch (key) {
@@ -485,22 +471,72 @@ public class MainActivity
         billAdapter.addItem(bill);
     }
 
+    //onSwipe implementation of RecyclerItemTouchHelperListener ie event on onSwiping of bill items to delete
     @Override
-    public void onBackPressed() {
-        if (backPressed) {
-            super.onBackPressed();
-        }
-        backPressed = true;
-        Toast.makeText(this, "Press back again to exit.", Toast.LENGTH_SHORT).show();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                backPressed = false;
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof BillAdapter.ViewHolder) {
+            // get the removed item name to display it in snack bar
+            String name = billAdapter.getItem(viewHolder.getAdapterPosition()).getProduct();
+
+            // backup of removed item for undo purpose
+            final BillModel deletedItem = billAdapter.getItem(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            billAdapter.removeItem(viewHolder.getAdapterPosition());
+
+            // update billing Amount
+            changePrice(-deletedItem.getRate(), deletedItem.getId());
+
+            if (billAdapter.getItemCount() == 0) {
+                discountPercentage = 0;
+                toggleSaverButton(true);
             }
-        }, 2000);
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(rV_billing_list, name + " removed from list!", Snackbar.LENGTH_LONG)
+                    .setAction("UNDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            billAdapter.restoreDeletedItem(deletedItem, deletedIndex);
+                        }
+                    })
+                    .setActionTextColor(Color.WHITE);
+            snackbar.show();
+        }
+    }
+
+    @Override
+    public void onBillAdded(BillModel billModel) {
+        toggleSaverButton(false);
+        changePrice(billModel.getRate(), billModel.getId());
     }
 
 
+    //-----------------------------------------------------User defined Functions---------------------------//
+
+    private void InitialiseRecyclerViewWithAdapter() {
+        billAdapter = new BillAdapter();
+        billAdapter.setBillAddedListener(this);
+        rV_billing_list.setLayoutManager(new LinearLayoutManager(this));
+        rV_billing_list.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        rV_billing_list.setAdapter(billAdapter);
+
+        //enable swipe-to-delete interaction
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rV_billing_list);
+
+    }
+
+    private String getSpecialOptString(String btnString) {
+        String returnString = "";
+        String arr[] = btnString.split(" ");
+        for (int i = 0; i < arr.length - 1; i++) {
+            returnString += arr[i];
+            returnString += " ";
+        }
+        return returnString.trim();
+    }
     private void changePrice(double price, int itemKey) {
         try {
             double oldPrice = Double.parseDouble(tV_total_amount.getText().toString());
@@ -533,13 +569,6 @@ public class MainActivity
             Toast.makeText(this, "ERROR : billing Pane Data error\nTD : " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
-    @Override
-    public void onBillAdded(BillModel billModel) {
-        toggleSaverButton(false);
-        changePrice(billModel.getRate(), billModel.getId());
-    }
-
     private void toggleSaverButton(boolean enable) {
         btn_save_50.setEnabled(enable);
         btn_save_100.setEnabled(enable);
@@ -548,4 +577,5 @@ public class MainActivity
             btn_save_100.setBackgroundResource(R.drawable.raised_button);
         }
     }
+
 }

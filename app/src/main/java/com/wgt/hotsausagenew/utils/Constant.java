@@ -15,6 +15,16 @@ public class Constant {
     public static final String multiplySign = "x";
     public static final int buttonPressedAnimTime = 100;//in milli-sec
 
+    public static final String PAYMENT_CASH = "cash";
+    public static final String PAYMENT_CARD = "card";
+    public static final String KEY_PAYMENT_MODE_INTENT = "payment_mode";
+    public static final String KEY_PAYABLE_AMT_INTENT = "payable_amt";
+    public static final String KEY_PAID_AMT_INTENT = "paid_amt";
+
+    public static final int REQUEST_CODE_PAYMENT_INTENT = 1;
+    public static final int REQUEST_CODE_TRANSACTION_INTENT = 2;
+    public static final int REQUEST_CODE_LOGOUT_INTENT = 3;
+
     public static final String SPECIAL_1 = "SPECIAL_1";
     public static final String SPECIAL_2 = "SPECIAL_2";
 

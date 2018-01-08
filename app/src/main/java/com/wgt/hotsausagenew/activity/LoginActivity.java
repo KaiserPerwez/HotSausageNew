@@ -1,16 +1,14 @@
 package com.wgt.hotsausagenew.activity;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.tV_update)
     TextView tV_update;
 
+    @BindView(R.id.layout_login)
+    ConstraintLayout login_Layout;
+
     private AppDatabase database;
 
     @Override
@@ -49,6 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        login_Layout.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_from_bottom)); // animation
 
         database = AppDatabase.getDatabase(getApplicationContext());//initialise database
         // cleanup for testing some initial data, if necessary
@@ -75,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("username", userModel.username);
                     intent.putExtra("site", userModel.site);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_left); // animation
                     finish();
 
                 } else {

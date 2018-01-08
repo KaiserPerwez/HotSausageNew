@@ -132,6 +132,7 @@ public class MainActivity
         handler = new Handler();
         InitialiseRecyclerViewWithAdapter();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -146,8 +147,6 @@ public class MainActivity
 //
 //            afterPayment_Dialog.show();
 //
-
-
             //---------------send dialog to INvoiceDilaogUtil and procedd as we did for other dialog.
             //Use listener to update database,last transaction,clear bill panel,etc
 
@@ -402,6 +401,7 @@ public class MainActivity
         Intent intent = new Intent(this, PaymentActivity.class);
         intent.putExtra(Constant.KEY_PAYABLE_AMT_INTENT, tV_payable_amount.getText());
         startActivityForResult(intent, Constant.REQUEST_CODE_PAYMENT_INTENT);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_up);
     }
 
     @OnLongClick({R.id.btn_special_1, R.id.btn_special_2})
@@ -441,7 +441,6 @@ public class MainActivity
         return false;
     }
 
-
     //----------------------------------Listener Callbacks------------------//
     @Override
     public void onSpecialItemClicked(String key, SpecialItemModel specialItem) {
@@ -470,7 +469,6 @@ public class MainActivity
     public void onGiftCardSelectedListener(BillModel bill) {
         billAdapter.addItem(bill);
     }
-
     //onSwipe implementation of RecyclerItemTouchHelperListener ie event on onSwiping of bill items to delete
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {

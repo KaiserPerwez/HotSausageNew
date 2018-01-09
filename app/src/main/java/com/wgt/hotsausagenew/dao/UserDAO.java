@@ -16,7 +16,7 @@ import java.util.List;
 @Dao
 public interface UserDAO {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.FAIL)
     void addUser(UserModel... userModel);
 
     @Query("select * from usermodel where username = :userName and password = :passWord limit 1")

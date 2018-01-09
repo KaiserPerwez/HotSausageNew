@@ -29,17 +29,17 @@ public class TransactionAdapter extends BaseAdapter {
 
     private HashSet<Integer> unfoldedIndexes = new HashSet<>();
 
+    //to disAllowed parentListView to accept touch events, when we touch on the inner listView
     private ListView parentListView;
-
-    public void setParentListView(ListView parentListView) {
-        this.parentListView = parentListView;
-    }
 
     public TransactionAdapter(List<TransactionModel> listOfTrans, Context context) {
         this.listOfTrans = listOfTrans;
         this.context = context;
     }
 
+    public void setParentListView(ListView parentListView) {
+        this.parentListView = parentListView;
+    }
 
     @Override
     public int getCount() {

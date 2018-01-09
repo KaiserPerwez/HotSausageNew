@@ -1,23 +1,33 @@
 package com.wgt.hotsausagenew.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.support.annotation.NonNull;
+
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
 /**
  * Created by Admin on 27-12-2017.
  */
-
+@Entity(
+        primaryKeys = {"id", "product"},
+        foreignKeys = {
+                @ForeignKey(
+                        entity = TransactionModel.class,
+                        parentColumns = "id",
+                        childColumns = "id",
+                        onDelete = CASCADE,
+                        onUpdate = CASCADE
+                )
+        }
+)
 public class BillModel {
+    @NonNull
     private String product;
     private int quantity;
     private double rate;
+    @NonNull
     private int id;
-
-    public BillModel() {
-    }
-
-    /*public BillModel(String product, int quantity, double rate) {
-        this.product = product;
-        this.quantity = quantity;
-        this.rate = rate;
-    }*/
 
     public BillModel(String product, int quantity, double rate, int id) {
         this.product = product;

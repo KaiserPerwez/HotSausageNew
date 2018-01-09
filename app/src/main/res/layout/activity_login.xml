@@ -96,7 +96,7 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:padding="10dp"
-            android:text="dev"
+            android:text="de"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.4"
             app:layout_constraintStart_toStartOf="parent"

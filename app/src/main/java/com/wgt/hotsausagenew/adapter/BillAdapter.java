@@ -112,6 +112,10 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
             listener.onBillAdded(item);
         }
     }
+
+    public List<BillModel> getBillList() {
+        return list;
+    }
 //-----------------------------------------------------------------------------------------------------//
 
     public void setBillAddedListener(BillAddedListener listener) {

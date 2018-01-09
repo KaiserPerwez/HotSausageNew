@@ -11,24 +11,22 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Constant {
+
     public static final String poundSign = "£";
     public static final String multiplySign = "x";
     public static final int buttonPressedAnimTime = 100;//in milli-sec
-
-    public static final String PAYMENT_CASH = "cash";
-    public static final String PAYMENT_CARD = "card";
+    public static final String PAYMENT_CASH = "CASH";
+    public static final String PAYMENT_CARD = "CARD";
     public static final String KEY_PAYMENT_MODE_INTENT = "payment_mode";
     public static final String KEY_PAYABLE_AMT_INTENT = "payable_amt";
     public static final String KEY_PAID_AMT_INTENT = "paid_amt";
-
+    public static final String KEY_TOTAL_AMT_INTENT = "total_amt";
+    public static final String KEY_DISCOUNT_AMT_INTENT = "discount_amt";
     public static final int REQUEST_CODE_PAYMENT_INTENT = 1;
     public static final int REQUEST_CODE_TRANSACTION_INTENT = 2;
     public static final int REQUEST_CODE_LOGOUT_INTENT = 3;
-
     public static final String SPECIAL_1 = "SPECIAL_1";
     public static final String SPECIAL_2 = "SPECIAL_2";
-
-
     public static final int KEY_REGULAR = 1;
     public static final int KEY_LARGE = 2;
     public static final int KEY_FOOTLONG = 3;
@@ -42,7 +40,7 @@ public class Constant {
     public static final int KEY_REGULAR_SAUSAGE = 11;
     public static final int KEY_LARGE_SAUSAGE = 12;
     public static final int KEY_FOOTLONG_SAUSAGE = 13;
-
+    private static int loggedInUserId = 0;
     private static HashMap<Integer, Double> productPriceMap = new HashMap<>();
     private static List<Integer> nonDiscountableItemList = new ArrayList<>();
     private static List<SpecialItemModel> specialList1 = new ArrayList<>();
@@ -149,7 +147,11 @@ public class Constant {
         }
     }
 
+    public static int getLoggedInUserId() {
+        return loggedInUserId;
+    }
 
-
-
+    public static void setLoggedInUserId(int id) {
+        loggedInUserId = id;
+    }
 }

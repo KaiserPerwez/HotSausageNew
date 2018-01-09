@@ -12,23 +12,23 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pref {
+public class DiscountPref {
 
     public static final String DISCOUNT_PREF = "discount_pref"; // file
     public static final String DISCOUNT_KEY = "discount"; // key, (value will be json)
 
     private Context context;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences discountSharedPreferences;
     private SharedPreferences.Editor editor;
 
-    public Pref(Context context) {
+    public DiscountPref(Context context) {
         this.context = context;
-        sharedPreferences = context.getSharedPreferences(DISCOUNT_PREF, Context.MODE_PRIVATE);
+        discountSharedPreferences = context.getSharedPreferences(DISCOUNT_PREF, Context.MODE_PRIVATE);
     }
 
     public List<DiscountModel> getDiscountsPref() {
         List<DiscountModel> list = null;
-        String stringList = sharedPreferences.getString(DISCOUNT_KEY, null);
+        String stringList = discountSharedPreferences.getString(DISCOUNT_KEY, null);
         if (stringList == null){
             return null;
         }
@@ -37,13 +37,13 @@ public class Pref {
     }
 
     private void saveDiscounts(List<DiscountModel> list) {
-        editor = sharedPreferences.edit();
+        editor = discountSharedPreferences.edit();
         editor.putString(DISCOUNT_KEY, getStringFromList(list));
         editor.apply();
     }
 
     public boolean saveDiscount(DiscountModel discount) {
-        editor = sharedPreferences.edit();
+        editor = discountSharedPreferences.edit();
         List<DiscountModel> list = getDiscountsPref();
         if (list == null) {
             list = new ArrayList<DiscountModel>();

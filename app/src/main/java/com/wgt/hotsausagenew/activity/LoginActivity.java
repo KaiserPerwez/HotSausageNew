@@ -20,6 +20,7 @@ import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.database.AppDatabase;
 import com.wgt.hotsausagenew.dialog.AddUserDialogUtil;
 import com.wgt.hotsausagenew.model.UserModel;
+import com.wgt.hotsausagenew.utils.Constant;
 
 import java.util.List;
 
@@ -73,6 +74,8 @@ public class LoginActivity extends AppCompatActivity {
             if (validateData(uname, pass)) {
                 UserModel userModel = authenticateUser(uname, pass);
                 if(userModel!=null){
+                    //save userID to Constant, for further reference
+                    Constant.setLoggedInUserId(userModel.id);
                     Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(this, MainActivity.class);
                     intent.putExtra("username", userModel.username);

@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.utils.Constant;
+import com.wgt.hotsausagenew.utils.LastTransactionPref;
 
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -93,6 +95,12 @@ public class PaymentActivity extends AppCompatActivity {
         String intent_val_payable_amount = null;
         intent_val_payable_amount = prev_intent.getStringExtra(Constant.KEY_PAYABLE_AMT_INTENT);
         tV_total_amt.setText(intent_val_payable_amount);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 
     @OnTouch({R.id.btn_total, R.id.btn_round_to_next_pound, R.id.btn_pound_5, R.id.btn_pound_10, R.id.btn_pound_20})
@@ -195,10 +203,22 @@ public class PaymentActivity extends AppCompatActivity {
                 }
 
             }
+
+            // get current time and save it as last transaction time
+            saveCurrenttime();
+
             prev_intent.putExtra(Constant.KEY_PAID_AMT_INTENT, paid);
             setResult(Activity.RESULT_OK, prev_intent);
             finish();
+            overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
         }
         return false;
+    }
+
+    private void saveCurrenttime() {
+        Calendar calendar = Calendar.getInstance();
+        int h = calendar.get(Calendar.HOUR_OF_DAY);
+        int m = calendar.get(Calendar.MINUTE);
+        new LastTransactionPref(this).saveTime(h + ":" + m);
     }
 }

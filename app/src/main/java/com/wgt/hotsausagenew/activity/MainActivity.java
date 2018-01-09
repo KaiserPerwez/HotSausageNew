@@ -24,14 +24,22 @@ import android.widget.Toast;
 
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.adapter.BillAdapter;
+import com.wgt.hotsausagenew.database.AppDatabase;
 import com.wgt.hotsausagenew.dialog.DiscountDialogUtil;
 import com.wgt.hotsausagenew.dialog.GiftCardDialogUtils;
+import com.wgt.hotsausagenew.dialog.InvoiceDialogUtil;
 import com.wgt.hotsausagenew.dialog.SpecialDialogUtil;
 import com.wgt.hotsausagenew.helper.RecyclerItemTouchHelper;
 import com.wgt.hotsausagenew.model.BillModel;
 import com.wgt.hotsausagenew.model.DiscountModel;
 import com.wgt.hotsausagenew.model.SpecialItemModel;
+import com.wgt.hotsausagenew.model.TransactionModel;
 import com.wgt.hotsausagenew.utils.Constant;
+import com.wgt.hotsausagenew.utils.DBTransIdPref;
+import com.wgt.hotsausagenew.utils.LastTransactionPref;
+
+import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -122,6 +130,10 @@ public class MainActivity
 
     private double discountPercentage;
 
+    private AppDatabase appDatabase;
+
+    private Dialog hiddenDialog;
+
     //-----------------------------------------------Activity Functions Overridden------------//
 
     @Override
@@ -131,6 +143,13 @@ public class MainActivity
         ButterKnife.bind(this);
         handler = new Handler();
         InitialiseRecyclerViewWithAdapter();
+        appDatabase = AppDatabase.getDatabase(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tV_lastTransaction.setText("Last transaction time - " + new LastTransactionPref(this).getTime());
     }
 
     @Override
@@ -139,17 +158,33 @@ public class MainActivity
 
         if (requestCode == Constant.REQUEST_CODE_PAYMENT_INTENT && resultCode == Activity.RESULT_OK) {
             Toast.makeText(this, "Paid Via: " + data.getStringExtra(Constant.KEY_PAYMENT_MODE_INTENT), Toast.LENGTH_SHORT).show();
-//            final Dialog afterPayment_Dialog = new Dialog(this);// Create custom dialog object
-//            afterPayment_Dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//            afterPayment_Dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//            afterPayment_Dialog.setCancelable(true);
-//            afterPayment_Dialog.setContentView(R.layout.dialog_invoice);
-//
-//            afterPayment_Dialog.show();
-//
+            final Dialog afterPayment_Dialog = new Dialog(this);// Create custom dialog object
+            afterPayment_Dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            afterPayment_Dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            afterPayment_Dialog.setCancelable(true);
+            afterPayment_Dialog.setCanceledOnTouchOutside(true);
+            afterPayment_Dialog.setContentView(R.layout.dialog_invoice);
+
+            data.putExtra(Constant.KEY_TOTAL_AMT_INTENT, tV_total_amount.getText().toString());
+            data.putExtra(Constant.KEY_DISCOUNT_AMT_INTENT, tV_discount_amount.getText().toString());
+            data.putExtra(Constant.KEY_PAYABLE_AMT_INTENT, tV_payable_amount.getText().toString());
+
+            //afterPayment_Dialog.show();
+            InvoiceDialogUtil invoiceDialogUtil = new InvoiceDialogUtil(afterPayment_Dialog, data, this);
+            invoiceDialogUtil.showDialog();
+            // auto dismiss dialog after 15 sec
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    afterPayment_Dialog.dismiss();
+                }
+            }, 15000);
             //---------------send dialog to INvoiceDilaogUtil and procedd as we did for other dialog.
             //Use listener to update database,last transaction,clear bill panel,etc
 
+            // save this transaction into DB
+            saveTransactionIntoDB();
+            clearBillPane();
         }
     }
 
@@ -174,21 +209,19 @@ public class MainActivity
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
             v.setBackgroundResource(R.drawable.card_button_pressed);
         else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            hiddenDialog.dismiss();
             v.setBackgroundResource(R.drawable.calculator_total_button);
+            int id = v.getId();
+            if (id == R.id.btn_sync)
+                Toast.makeText(this, "Syncing..", Toast.LENGTH_SHORT).show();
+            else if (id == R.id.btn_transaction) {
+                startActivityForResult(new Intent(this, TransactionActivity.class), Constant.REQUEST_CODE_TRANSACTION_INTENT);
+            } else if (id == R.id.btn_logout) {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_bottom);
+            }
         }
-
-        int id = v.getId();
-        if (id == R.id.btn_sync)
-            Toast.makeText(this, "Syncing..", Toast.LENGTH_SHORT).show();
-        else if (id == R.id.btn_transaction) {
-            startActivityForResult(new Intent(this, TransactionActivity.class), Constant.REQUEST_CODE_TRANSACTION_INTENT);
-            finish();
-        } else if (id == R.id.btn_logout) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        }
-
-
         return false;
     }
 
@@ -398,10 +431,21 @@ public class MainActivity
 
     @OnClick(R.id.tV_payable_amount)
     public void goToPaymentScreen() {
+        try {
+            double tot = Double.parseDouble(tV_total_amount.getText().toString());
+            if (tot < 1) {
+                Toast.makeText(this, "Please Add items first.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Amount is not acceptable.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent intent = new Intent(this, PaymentActivity.class);
         intent.putExtra(Constant.KEY_PAYABLE_AMT_INTENT, tV_payable_amount.getText());
         startActivityForResult(intent, Constant.REQUEST_CODE_PAYMENT_INTENT);
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_up);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
     @OnLongClick({R.id.btn_special_1, R.id.btn_special_2})
@@ -423,7 +467,7 @@ public class MainActivity
 
     @OnLongClick(R.id.iV_header)
     public boolean showHiddenMenu() {
-        final Dialog hiddenDialog = new Dialog(this);// Create custom dialog object
+        hiddenDialog = new Dialog(this);// Create custom dialog object
         hiddenDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         hiddenDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         hiddenDialog.setCancelable(true);
@@ -436,7 +480,6 @@ public class MainActivity
         btn_sync.setOnTouchListener(this);
         btn_transaction.setOnTouchListener(this);
         btn_logout.setOnTouchListener(this);
-
 
         return false;
     }
@@ -512,6 +555,43 @@ public class MainActivity
 
 
     //-----------------------------------------------------User defined Functions---------------------------//
+
+    private void saveTransactionIntoDB() {
+        int discount = 0;
+        if (discountPercentage == .5) {
+            discount = 50;
+        } else if (discountPercentage == 1) {
+            discount = 100;
+        }
+        DBTransIdPref dbIdPref = new DBTransIdPref(this);
+        int id = dbIdPref.getID();
+        Calendar calendar = Calendar.getInstance();
+        List<BillModel> list = billAdapter.getBillList();
+        if (list == null || list.size() < 1) {
+            Toast.makeText(this, "Billing Data Not Found.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        TransactionModel transactionModel = new TransactionModel(
+                new LastTransactionPref(this).getTime(),
+                Double.parseDouble(tV_payable_amount.getText().toString()),
+                Double.parseDouble(tV_total_amount.getText().toString()),
+                Double.parseDouble(tV_discount_amount.getText().toString()),
+                id,
+                Constant.getLoggedInUserId(),
+                calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.YEAR),
+                0,
+                discount
+        );
+        long i = appDatabase.transactionDAO().addTransaction(transactionModel);
+        long j = 0;
+        for (BillModel billModel : list) {
+            billModel.setId(id);
+            j = appDatabase.billDAO().addBill(billModel);
+        }
+        dbIdPref.incrementID();
+    }
 
     private void InitialiseRecyclerViewWithAdapter() {
         billAdapter = new BillAdapter();

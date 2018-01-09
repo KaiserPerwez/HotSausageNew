@@ -19,8 +19,7 @@ import android.widget.Toast;
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.adapter.DiscountAdapter;
 import com.wgt.hotsausagenew.model.DiscountModel;
-import com.wgt.hotsausagenew.model.SpecialItemModel;
-import com.wgt.hotsausagenew.utils.Pref;
+import com.wgt.hotsausagenew.utils.DiscountPref;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,23 +32,14 @@ import butterknife.OnClick;
 public class DiscountDialogUtil implements AdapterView.OnItemLongClickListener,
                                             AdapterView.OnItemClickListener, DeleteDataDialogUtil.DeletionSelected {
 
-    private Dialog dialog;
-    private DiscountAdapter adapter;
-    private Context context;
-    private Pref pref;
-    private DiscountDialogListener listener;
-
     @BindView(R.id.dialog_title)
     TextView dialog_title;
-
     @BindView(R.id.dialog_header_col_1)
     TextView dialog_header_col_1;
     @BindView(R.id.dialog_header_col_2)
     TextView dialog_header_col_2;
     @BindView(R.id.dialog_header_col_3)
     TextView dialog_header_col_3;
-
-
     @BindView(R.id.dialog_iV_add)
     ImageView dialog_iV_add;
     @BindView(R.id.dialog_add_panel)
@@ -70,11 +60,16 @@ public class DiscountDialogUtil implements AdapterView.OnItemLongClickListener,
     LinearLayout dialog_list_panel;
     @BindView(R.id.dialog_listview)
     ListView dialog_listview;
+    private Dialog dialog;
+    private DiscountAdapter adapter;
+    private Context context;
+    private DiscountPref discountPref;
+    private DiscountDialogListener listener;
 
     public DiscountDialogUtil(Context context) {
         this.context = context;
-        pref = new Pref(context);
-        adapter = new DiscountAdapter(context, pref.getDiscountsPref());
+        discountPref = new DiscountPref(context);
+        adapter = new DiscountAdapter(context, discountPref.getDiscountsPref());
 
         this.dialog = new Dialog(context);// Create custom dialog object
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -128,7 +123,7 @@ public class DiscountDialogUtil implements AdapterView.OnItemLongClickListener,
                     dialog_et_col_3.getText().toString().trim(),
                     Double.parseDouble(dialog_et_col_2.getText().toString().trim())
             );
-            boolean b = pref.saveDiscount(discountModel);
+            boolean b = discountPref.saveDiscount(discountModel);
             if (b){
                 adapter.addNewDiscount(discountModel);
                 hideAddUserPanel();
@@ -149,7 +144,7 @@ public class DiscountDialogUtil implements AdapterView.OnItemLongClickListener,
         delDialog.setContentView(R.layout.dialog_delete_alert);
         delDialog.show();
 
-        String itemToBeDeleted = pref.getDiscountsPref().get(position).getProduct();
+        String itemToBeDeleted = discountPref.getDiscountsPref().get(position).getProduct();
         DeleteDataDialogUtil deleteDataDialogUtil = new DeleteDataDialogUtil(itemToBeDeleted, this, delDialog);
 
         return true;
@@ -158,7 +153,7 @@ public class DiscountDialogUtil implements AdapterView.OnItemLongClickListener,
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         dialog.dismiss();
-        listener.onDiscountselected(pref.getDiscountsPref().get(position));
+        listener.onDiscountselected(discountPref.getDiscountsPref().get(position));
     }
 
     private boolean validateData() {
@@ -193,15 +188,15 @@ public class DiscountDialogUtil implements AdapterView.OnItemLongClickListener,
 
     @Override
     public void onDeletionSelected(String itemName) {
-        pref.deleteItem(itemName);
+        discountPref.deleteItem(itemName);
         adapter.deleteItem(itemName);
-    }
-
-    public interface DiscountDialogListener {
-        void onDiscountselected(DiscountModel discount);
     }
 
     public void setDiscountDialogListener (DiscountDialogListener listener) {
         this.listener = listener;
+    }
+
+    public interface DiscountDialogListener {
+        void onDiscountselected(DiscountModel discount);
     }
 }

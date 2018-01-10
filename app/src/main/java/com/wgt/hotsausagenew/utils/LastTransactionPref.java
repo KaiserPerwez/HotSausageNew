@@ -22,11 +22,27 @@ public class LastTransactionPref {
     public void saveTime(String value) {
         editor = sharedPreferences.edit();
         editor.putString(LAST_TRANSICTION_TIME_KEY, value);
-        editor.commit();
+        editor.apply();
     }
 
     public String getTime() {
-        return sharedPreferences.getString(LAST_TRANSICTION_TIME_KEY, "");
+        String t = sharedPreferences.getString(LAST_TRANSICTION_TIME_KEY, null);
+        if (t == null) {
+            return "";
+        }
+        String arr[] = t.split(":");
+        String h = "";
+        String m = "";
+        if (arr[0].length() == 1) {
+            h = "0" + arr[0];
+        } else {
+            h = arr[0];
+        }
+        if (arr[1].length() == 1) {
+            m = "0" + arr[1];
+        } else {
+            m = arr[1];
+        }
+        return h + ":" + m;
     }
-
 }

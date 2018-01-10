@@ -28,6 +28,6 @@ public class DBTransIdPref {
     public void incrementID() {
         editor = sharedPreferences.edit();
         editor.putInt(DB_ID_KEY, getID() + 1);
-        editor.commit();
+        editor.apply();
     }
 }

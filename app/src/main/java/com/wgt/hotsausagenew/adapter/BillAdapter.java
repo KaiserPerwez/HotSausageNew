@@ -43,7 +43,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         BillModel billModel = list.get(position);
         holder.tV_product.setText(billModel.getProduct());
         holder.tV_quantity.setText(Constant.multiplySign + billModel.getQuantity());
-        holder.tV_amount.setText(Constant.poundSign + billModel.getRate());
+        holder.tV_amount.setText(Constant.poundSign + billModel.getAmount());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
             if (item.getProduct().equals(bill.getProduct())) {
                 // item matched ,increment quantity and price instead of adding it as new bill-item;
                 item.setQuantity(item.getQuantity() + 1);
-                item.setRate(item.getRate() + bill.getRate());
+                item.setAmount(item.getAmount() + bill.getAmount());
                 notifyItemChanged(position);
                 if (rv != null)
                     rv.scrollToPosition(position);//allow auto-scroll to item at pos
@@ -75,7 +75,7 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ViewHolder> {
         }
 
         // nothing matched.. add new bill
-        list.add(new BillModel(bill.getProduct(), 1, bill.getRate(), bill.getId()));
+        list.add(new BillModel(bill.getProduct(), 1, bill.getAmount(), bill.getTrans_id()));
         notifyItemInserted(list.size());
         if (rv != null)
             rv.scrollToPosition(list.size());//allow auto-scroll to item at pos

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.utils.Constant;
 import com.wgt.hotsausagenew.utils.LastTransactionPref;
+import com.wgt.hotsausagenew.utils.ToastUtil;
 
 import java.util.Calendar;
 import java.util.List;
@@ -196,7 +197,7 @@ public class PaymentActivity extends AppCompatActivity {
                 float amount = paid - bill;
 
                 if (amount < 0) {
-                    Toast.makeText(this, "Insufficient Funds", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToastGeneric(this, "Insufficient Funds", Toast.LENGTH_SHORT).show();
                     return false;
                 } else {
                     prev_intent.putExtra(Constant.KEY_PAYMENT_MODE_INTENT, Constant.PAYMENT_CASH);

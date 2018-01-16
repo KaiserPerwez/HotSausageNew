@@ -51,13 +51,13 @@ public class TransactionActivity extends AppCompatActivity {
         listOfTrans = database.transactionDAO().getAllTransByDate(date, mnth, year);
         transCount = listOfTrans.size();
         for (TransactionModel transactionModel : listOfTrans) {
-            int id = transactionModel.getId();
+            int id = transactionModel.getTrans_id();
             listOfBills = database.billDAO().getAllBillById(id);
             transactionModel.setBillList(listOfBills);
 
             //counting all amount
             for (BillModel billModel : listOfBills) {
-                amountCount += billModel.getRate();
+                amountCount += billModel.getAmount();
             }
         }
 

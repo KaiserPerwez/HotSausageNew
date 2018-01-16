@@ -20,6 +20,7 @@ import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.adapter.DiscountAdapter;
 import com.wgt.hotsausagenew.model.DiscountModel;
 import com.wgt.hotsausagenew.utils.DiscountPref;
+import com.wgt.hotsausagenew.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -179,9 +180,9 @@ public class DiscountDialogUtil implements AdapterView.OnItemLongClickListener,
             success = true;
         } catch (NumberFormatException e) {
             dialog_et_col_2.requestFocus();
-            Toast.makeText(context, "ERROR : provide correct value", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToastGeneric(context, "ERROR : provide correct value", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Toast.makeText(context, "ERROR : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            ToastUtil.showToastGeneric(context, "ERROR : " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return success;
     }

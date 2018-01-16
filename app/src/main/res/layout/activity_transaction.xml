@@ -6,7 +6,7 @@
     android:background="@color/bg_maroon"
     tools:context="com.wgt.hotsausagenew.activity.TransactionActivity">
     <!--<ImageView-->
-    <!--android:id="@+id/img_header"-->
+    <!--andridd:iduser_trans_trans_id@+id/img_header"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="wrap_content"-->
     <!--android:layout_alignParentTop="true"-->

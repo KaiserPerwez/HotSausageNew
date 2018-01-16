@@ -20,6 +20,9 @@ public interface BillDAO {
     @Query("select * from BillModel")
     List<BillModel> getAllBill();
 
-    @Query("select * from BillModel where id = :id")
+    @Query("select * from BillModel where trans_id = :id")
     List<BillModel> getAllBillById(int id);
+
+    @Query("DELETE from BillModel where trans_id = :trans_id")
+    int deleteBillById(int trans_id);
 }

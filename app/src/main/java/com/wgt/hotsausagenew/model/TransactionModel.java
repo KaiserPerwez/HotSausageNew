@@ -3,16 +3,16 @@ package com.wgt.hotsausagenew.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 
 import java.util.List;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
-@Entity(foreignKeys = {
+@Entity(primaryKeys = {"trans_id"},
+        foreignKeys = {
         @ForeignKey(
                 entity = UserModel.class,
-                parentColumns = "id",
+                parentColumns = "user_id",
                 childColumns = "user_id",
                 onDelete = CASCADE,
                 onUpdate = CASCADE
@@ -22,11 +22,10 @@ public class TransactionModel {
     private String time;
     private double sale;
     private double amount;
-    private double discounts;
+    private double discount;
     @Ignore
     private List<BillModel> billList;
-    @PrimaryKey
-    private int id;
+    private int trans_id;
     private int user_id;
     private int date;
     private int month;
@@ -34,14 +33,14 @@ public class TransactionModel {
     private int sync_status;
     private int saver_status;
 
-    public TransactionModel(String time, double sale, double amount, double discounts,
-                            int id, int user_id, int date, int month, int year,
+    public TransactionModel(String time, double sale, double amount, double discount,
+                            int trans_id, int user_id, int date, int month, int year,
                             int sync_status, int saver_status) {
         this.time = time;
         this.sale = sale;
         this.amount = amount;
-        this.discounts = discounts;
-        this.id = id;
+        this.discount = discount;
+        this.trans_id = trans_id;
         this.user_id = user_id;
         this.date = date;
         this.month = month;
@@ -50,11 +49,11 @@ public class TransactionModel {
         this.saver_status = saver_status;
     }
 
-    public TransactionModel(String time, double sale, double amount, double discounts, List<BillModel> billList) {
+    public TransactionModel(String time, double sale, double amount, double discount, List<BillModel> billList) {
         this.time = time;
         this.sale = sale;
         this.amount = amount;
-        this.discounts = discounts;
+        this.discount = discount;
         this.billList = billList;
     }
 
@@ -82,12 +81,12 @@ public class TransactionModel {
         this.amount = amount;
     }
 
-    public double getDiscounts() {
-        return discounts;
+    public double getDiscount() {
+        return discount;
     }
 
-    public void setDiscounts(double discounts) {
-        this.discounts = discounts;
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 
     public List<BillModel> getBillList() {
@@ -98,12 +97,12 @@ public class TransactionModel {
         this.billList = billList;
     }
 
-    public int getId() {
-        return id;
+    public int getTrans_id() {
+        return trans_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTrans_id(int trans_id) {
+        this.trans_id = trans_id;
     }
 
     public int getUser_id() {

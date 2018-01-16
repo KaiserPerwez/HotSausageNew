@@ -9,26 +9,24 @@ import android.support.annotation.NonNull;
  * Created by Admin on 26-12-2017.
  */
 @Entity(indices = {@Index(
-        value = {"username", "password"},
+        value = {"username"},
         unique = true)
 })
 public class UserModel {
 
-    @PrimaryKey(autoGenerate = true)
-    public int id;
+    @PrimaryKey
+    public int user_id;
     @NonNull
     public String username;
     @NonNull
     public String password;
     @NonNull
     public String site;
-    public int sync_status;//0--> NO_SYNC,  1--> SYNC_DOWN from server,  2-->SYNC_UP to server
 
-    public UserModel(String username, String password, String site, int sync_status) {
+    public UserModel(int user_id, String username, String password, String site) {
+        this.user_id = user_id;
         this.username = username;
         this.password = password;
         this.site = site;
-        this.sync_status = sync_status;
     }
-
 }

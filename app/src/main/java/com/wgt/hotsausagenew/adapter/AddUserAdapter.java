@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.model.UserModel;
+import com.wgt.hotsausagenew.utils.ToastUtil;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class AddUserAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return userModelList.get(position).id;
+        return userModelList.get(position).user_id;
     }
 
     @Override
@@ -72,7 +73,7 @@ public class AddUserAdapter extends BaseAdapter {
             UserModel item = userModelList.get(position);  // item at i'th position
             if (item.username.equals(userModel.username)) {
                 // item matched ,increment quantity and price instead of adding it as new bill-item;
-                Toast.makeText(ctx, "User already exists", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToastGeneric(ctx, "User already exists", Toast.LENGTH_SHORT).show();
                 return;
             }
         }

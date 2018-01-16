@@ -58,7 +58,7 @@ public class TransactionBillAdapter extends BaseAdapter {
         BillModel bill = (BillModel) list.get(position);
         holder.tV_product.setText(bill.getProduct());
         holder.tV_quantity.setText(Constant.multiplySign+bill.getQuantity());
-        holder.tV_amount.setText(Constant.poundSign + bill.getRate());
+        holder.tV_amount.setText(Constant.poundSign + bill.getAmount());
 
         return convertView;
 

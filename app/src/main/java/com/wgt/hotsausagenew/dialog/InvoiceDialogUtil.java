@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.utils.Constant;
 import com.wgt.hotsausagenew.utils.LastTransactionPref;
+import com.wgt.hotsausagenew.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,7 +74,7 @@ public class InvoiceDialogUtil {
                 dialog_tv_payment_mode.setText("PAYMENT MODE : " + mode);
                 dialog_tv_last_transaction.setText("" + new LastTransactionPref(context).getTime());
             } catch (NumberFormatException e) {
-                Toast.makeText(context, "ERROR : Data parsing error", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToastGeneric(context, "ERROR : Data parsing error", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.model.SpecialItemModel;
+import com.wgt.hotsausagenew.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class SpecialItemAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.desc = (TextView) convertView.findViewById(R.id.dialog_listitem_col_1);
             holder.price = (TextView) convertView.findViewById(R.id.dialog_listitem_col_2);
-            //holder.layout = (LinearLayout) convertView.findViewById(R.id.special_single_item_layout);
+            //holder.layout = (LinearLayout) convertView.findViewById(R.user_id.special_single_item_layout);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -81,24 +82,23 @@ public class SpecialItemAdapter extends BaseAdapter {
         return convertView;
     }
 
-
-    private class ViewHolder {
-        TextView desc, price;
-        //LinearLayout layout;
-    }
-
-
-    //======================USER_DEFINED_AREA========================//
-
     public boolean addItem(SpecialItemModel item) {
         for(SpecialItemModel si : specialItemsList) {
             if (si.getProd().equals(item.getProd())){
-                Toast.makeText(context, "Item : "+item.getProd()+" already exists.", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToastGeneric(context, "Item : " + item.getProd() + " already exists.", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
         specialItemsList.add(item);
         notifyDataSetChanged();
         return true;
+    }
+
+
+    //======================USER_DEFINED_AREA========================//
+
+    private class ViewHolder {
+        TextView desc, price;
+        //LinearLayout layout;
     }
 }

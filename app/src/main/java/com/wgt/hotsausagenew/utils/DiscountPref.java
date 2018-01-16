@@ -52,7 +52,7 @@ public class DiscountPref {
         //check for duplicate value
         for (DiscountModel d : list) {
             if (d.getProduct().equals(discount.getProduct())) {
-                Toast.makeText(context, "Item : " + discount.getProduct() + " already exists.", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToastGeneric(context, "Item : " + discount.getProduct() + " already exists.", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }

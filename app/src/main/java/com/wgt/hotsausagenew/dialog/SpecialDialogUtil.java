@@ -19,8 +19,8 @@ import android.widget.Toast;
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.adapter.SpecialItemAdapter;
 import com.wgt.hotsausagenew.model.SpecialItemModel;
-import com.wgt.hotsausagenew.model.UserModel;
 import com.wgt.hotsausagenew.utils.Constant;
+import com.wgt.hotsausagenew.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,24 +31,14 @@ import butterknife.OnClick;
  */
 
 public class SpecialDialogUtil implements AdapterView.OnItemClickListener {
-    private Context context;
-    private String key;
-    private SpecialItemAdapter adapter;
-
-    private Dialog dialog;
-    private SpecialDialogItemClickListener listener;
-
     @BindView(R.id.dialog_title)
     TextView dialog_title;
-
     @BindView(R.id.dialog_header_col_1)
     TextView dialog_header_col_1;
     @BindView(R.id.dialog_header_col_2)
     TextView dialog_header_col_2;
     @BindView(R.id.dialog_header_col_3)
     TextView dialog_header_col_3;
-
-
     @BindView(R.id.dialog_iV_add)
     ImageView dialog_iV_add;
     @BindView(R.id.dialog_add_panel)
@@ -69,6 +59,11 @@ public class SpecialDialogUtil implements AdapterView.OnItemClickListener {
     LinearLayout dialog_list_panel;
     @BindView(R.id.dialog_listview)
     ListView dialog_listview;
+    private Context context;
+    private String key;
+    private SpecialItemAdapter adapter;
+    private Dialog dialog;
+    private SpecialDialogItemClickListener listener;
 
 
     public SpecialDialogUtil(Context context, String key) {
@@ -167,10 +162,6 @@ public class SpecialDialogUtil implements AdapterView.OnItemClickListener {
         }
     }
 
-    public interface SpecialDialogItemClickListener {
-        void onSpecialItemClicked(String key, SpecialItemModel specialItem);
-    }
-
     private SpecialItemModel validateData() {
         SpecialItemModel item = null;
         try {
@@ -209,10 +200,14 @@ public class SpecialDialogUtil implements AdapterView.OnItemClickListener {
             item = new SpecialItemModel(name, value);
         }catch (NumberFormatException e) {
             dialog_et_col_2.requestFocus();
-            Toast.makeText(context, "ERROR : Provide correct Item Value.", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToastGeneric(context, "ERROR : Provide correct Item Value.", Toast.LENGTH_SHORT).show();
         }catch (Exception e) {
-            Toast.makeText(context, "ERROR : "+e.getMessage(), Toast.LENGTH_SHORT).show();
+            ToastUtil.showToastGeneric(context, "ERROR : " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return item;
+    }
+
+    public interface SpecialDialogItemClickListener {
+        void onSpecialItemClicked(String key, SpecialItemModel specialItem);
     }
 }

@@ -10,12 +10,12 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
  * Created by Admin on 27-12-2017.
  */
 @Entity(
-        primaryKeys = {"id", "product"},
+        primaryKeys = {"trans_id", "product"},
         foreignKeys = {
                 @ForeignKey(
                         entity = TransactionModel.class,
-                        parentColumns = "id",
-                        childColumns = "id",
+                        parentColumns = "trans_id",
+                        childColumns = "trans_id",
                         onDelete = CASCADE,
                         onUpdate = CASCADE
                 )
@@ -25,15 +25,15 @@ public class BillModel {
     @NonNull
     private String product;
     private int quantity;
-    private double rate;
+    private double amount;
     @NonNull
-    private int id;
+    private int trans_id;
 
-    public BillModel(String product, int quantity, double rate, int id) {
+    public BillModel(String product, int quantity, double amount, int trans_id) {
         this.product = product;
         this.quantity = quantity;
-        this.rate = rate;
-        this.id = id;
+        this.amount = amount;
+        this.trans_id = trans_id;
     }
 
     public String getProduct() {
@@ -52,19 +52,19 @@ public class BillModel {
         this.quantity = quantity;
     }
 
-    public double getRate() {
-        return rate;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
-    public int getId() {
-        return id;
+    public int getTrans_id() {
+        return trans_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTrans_id(int trans_id) {
+        this.trans_id = trans_id;
     }
 }

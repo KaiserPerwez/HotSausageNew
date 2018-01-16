@@ -34,9 +34,11 @@ import com.wgt.hotsausagenew.model.BillModel;
 import com.wgt.hotsausagenew.model.DiscountModel;
 import com.wgt.hotsausagenew.model.SpecialItemModel;
 import com.wgt.hotsausagenew.model.TransactionModel;
+import com.wgt.hotsausagenew.services.TransactionSyncService;
 import com.wgt.hotsausagenew.utils.Constant;
 import com.wgt.hotsausagenew.utils.DBTransIdPref;
 import com.wgt.hotsausagenew.utils.LastTransactionPref;
+import com.wgt.hotsausagenew.utils.ToastUtil;
 
 import java.util.Calendar;
 import java.util.List;
@@ -157,7 +159,7 @@ public class MainActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constant.REQUEST_CODE_PAYMENT_INTENT && resultCode == Activity.RESULT_OK) {
-            Toast.makeText(this, "Paid Via: " + data.getStringExtra(Constant.KEY_PAYMENT_MODE_INTENT), Toast.LENGTH_SHORT).show();
+            ToastUtil.showToastGeneric(this, "Paid Via: " + data.getStringExtra(Constant.KEY_PAYMENT_MODE_INTENT), Toast.LENGTH_SHORT).show();
             final Dialog afterPayment_Dialog = new Dialog(this);// Create custom dialog object
             afterPayment_Dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             afterPayment_Dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -194,7 +196,7 @@ public class MainActivity
             super.onBackPressed();
         }
         backPressed = true;
-        Toast.makeText(this, "Press back again to exit.", Toast.LENGTH_SHORT).show();
+        ToastUtil.showToastGeneric(this, "Press back again to exit.", Toast.LENGTH_SHORT).show();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -212,8 +214,10 @@ public class MainActivity
             hiddenDialog.dismiss();
             v.setBackgroundResource(R.drawable.calculator_total_button);
             int id = v.getId();
-            if (id == R.id.btn_sync)
-                Toast.makeText(this, "Syncing..", Toast.LENGTH_SHORT).show();
+            if (id == R.id.btn_sync) {
+                ToastUtil.showToastGeneric(this, "Syncing..", Toast.LENGTH_SHORT).show();
+                startService(new Intent(this, TransactionSyncService.class));
+            }
             else if (id == R.id.btn_transaction) {
                 startActivityForResult(new Intent(this, TransactionActivity.class), Constant.REQUEST_CODE_TRANSACTION_INTENT);
             } else if (id == R.id.btn_logout) {
@@ -304,7 +308,7 @@ public class MainActivity
                     );
                 } else if (button.getId()==R.id.btn_special1_opt) {
                     if (button.getText().toString().equalsIgnoreCase("Special1 Cheese")) {
-                        Toast.makeText(this, "Please select a special item first", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showToastGeneric(this, "Please select a special item first", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                     billAdapter.addItem(
@@ -320,7 +324,7 @@ public class MainActivity
                     );
                 }else if (button.getId()==R.id.btn_special2_opt) {
                     if (button.getText().toString().equalsIgnoreCase("Special2 Cheese")) {
-                        Toast.makeText(this, "Please select a special item first", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showToastGeneric(this, "Please select a special item first", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                     billAdapter.addItem(
@@ -336,10 +340,10 @@ public class MainActivity
                     );
                 } else if (button.getId() == R.id.btn_save_50) {
                     discountPercentage = .5;
-                    Toast.makeText(this, "50% saver on", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToastGeneric(this, "50% saver on", Toast.LENGTH_SHORT).show();
                 } else if (button.getId() == R.id.btn_save_100) {
                     discountPercentage = 1;
-                    Toast.makeText(this, "100% saver on", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToastGeneric(this, "100% saver on", Toast.LENGTH_SHORT).show();
                 } else if (button.getId()==R.id.btn_footlong_cheese) {
                     billAdapter.addItem(
                             new BillModel(
@@ -395,9 +399,9 @@ public class MainActivity
                             )
                     );
                 } else if (button.getId() == R.id.btn_special_1) {
-                    Toast.makeText(this, "Please long hold to get Special 1 Popup", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToastGeneric(this, "Please long hold to get Special 1 Popup", Toast.LENGTH_SHORT).show();
                 } else if (button.getId() == R.id.btn_special_2) {
-                    Toast.makeText(this, "Please long hold to get Special 2 Popup", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToastGeneric(this, "Please long hold to get Special 2 Popup", Toast.LENGTH_SHORT).show();
                 } else if (button.getId() == R.id.btn_gift_sale) {
                     GiftCardDialogUtils giftCardDialogUtils = new GiftCardDialogUtils(this, this);
                     giftCardDialogUtils.showDialog();
@@ -426,7 +430,7 @@ public class MainActivity
         if (billAdapter.getItemCount() == 0) {
             toggleSaverButton(true);
         }
-        Toast.makeText(this, "Cleared bill pane", Toast.LENGTH_SHORT).show();
+        ToastUtil.showToastGeneric(this, "Cleared bill pane", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.tV_payable_amount)
@@ -434,11 +438,11 @@ public class MainActivity
         try {
             double tot = Double.parseDouble(tV_total_amount.getText().toString());
             if (tot < 1) {
-                Toast.makeText(this, "Please Add items first.", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToastGeneric(this, "Please Add items first.", Toast.LENGTH_SHORT).show();
                 return;
             }
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Amount is not acceptable.", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToastGeneric(this, "Amount is not acceptable.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -489,17 +493,17 @@ public class MainActivity
     public void onSpecialItemClicked(String key, SpecialItemModel specialItem) {
         switch (key) {
             case Constant.SPECIAL_1:
-                Toast.makeText(this, "SPECIAL 1 : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
+                ToastUtil.showToastGeneric(this, "SPECIAL 1 : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
                 btn_special1_opt.setText(specialItem.getProd() + " Cheese");
                 btn_special_1.setText(specialItem.getProd());
                 break;
             case Constant.SPECIAL_2:
-                Toast.makeText(this, "SPECIAL 2 : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
+                ToastUtil.showToastGeneric(this, "SPECIAL 2 : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
                 btn_special2_opt.setText(specialItem.getProd() + " Cheese");
                 btn_special_2.setText(specialItem.getProd());
                 break;
             default:
-                Toast.makeText(this, "Special Type Not found for : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
+                ToastUtil.showToastGeneric(this, "Special Type Not found for : " + specialItem.getProd(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -527,7 +531,7 @@ public class MainActivity
             billAdapter.removeItem(viewHolder.getAdapterPosition());
 
             // update billing Amount
-            changePrice(-deletedItem.getRate(), deletedItem.getId());
+            changePrice(-deletedItem.getAmount(), deletedItem.getTrans_id());
 
             if (billAdapter.getItemCount() == 0) {
                 discountPercentage = 0;
@@ -550,7 +554,7 @@ public class MainActivity
     @Override
     public void onBillAdded(BillModel billModel) {
         toggleSaverButton(false);
-        changePrice(billModel.getRate(), billModel.getId());
+        changePrice(billModel.getAmount(), billModel.getTrans_id());
     }
 
 
@@ -568,7 +572,7 @@ public class MainActivity
         Calendar calendar = Calendar.getInstance();
         List<BillModel> list = billAdapter.getBillList();
         if (list == null || list.size() < 1) {
-            Toast.makeText(this, "Billing Data Not Found.", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToastGeneric(this, "Billing Data Not Found.", Toast.LENGTH_SHORT).show();
             return;
         }
         TransactionModel transactionModel = new TransactionModel(
@@ -587,7 +591,7 @@ public class MainActivity
         long i = appDatabase.transactionDAO().addTransaction(transactionModel);
         long j = 0;
         for (BillModel billModel : list) {
-            billModel.setId(id);
+            billModel.setTrans_id(id);
             j = appDatabase.billDAO().addBill(billModel);
         }
         dbIdPref.incrementID();
@@ -644,7 +648,7 @@ public class MainActivity
 
 
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "ERROR : billing Pane Data error\nTD : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            ToastUtil.showToastGeneric(this, "ERROR : billing Pane Data error\nTD : " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
     private void toggleSaverButton(boolean enable) {

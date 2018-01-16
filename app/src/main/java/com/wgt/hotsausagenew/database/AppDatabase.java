@@ -16,7 +16,7 @@ import com.wgt.hotsausagenew.model.UserModel;
  * Created by Admin on 26-12-2017.
  */
 
-@Database(entities = {UserModel.class, TransactionModel.class, BillModel.class}, version = 4, exportSchema = false)
+@Database(entities = {UserModel.class, TransactionModel.class, BillModel.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
@@ -24,7 +24,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             INSTANCE =
                     Room.databaseBuilder(context, AppDatabase.class, "HotSausageNewDatabase")
-//Room.inMemoryDatabaseBuilder(context.getApplicationContext(), AppDatabase.class)
+                            //Room.inMemoryDatabaseBuilder(context.getApplicationContext(), AppDatabase.class)
                             // For testing, allow queries on the main thread.
                             // Don't do this on a real app!
                             .allowMainThreadQueries()

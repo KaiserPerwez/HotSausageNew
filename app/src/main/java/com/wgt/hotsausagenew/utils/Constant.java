@@ -12,6 +12,7 @@ import java.util.List;
 
 public class Constant {
 
+    public static final String ADMIN_USERNAME = "AdminDev";
     public static final String poundSign = "£";
     public static final String multiplySign = "x";
     public static final int buttonPressedAnimTime = 100;//in milli-sec
@@ -124,7 +125,7 @@ public class Constant {
                 //checking for duplicate value
                 for (SpecialItemModel si : specialList1) {
                     if (si.getProd().equals(item.getProd())) {
-                        Toast.makeText(context, "Item : " + item.getProd() + " already exists", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showToastGeneric(context, "Item : " + item.getProd() + " already exists", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 }
@@ -135,14 +136,14 @@ public class Constant {
                 //checking for duplicate value
                 for (SpecialItemModel si : specialList2) {
                     if (si.getProd().equals(item.getProd())) {
-                        Toast.makeText(context, "Item : " + item.getProd() + " already exists", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showToastGeneric(context, "Item : " + item.getProd() + " already exists", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 }
                 specialList2.add(item);
                 return true;
             default:
-                Toast.makeText(context, "No Special List : " + specialType, Toast.LENGTH_SHORT).show();
+                ToastUtil.showToastGeneric(context, "No Special List : " + specialType, Toast.LENGTH_SHORT).show();
                 return false;
         }
     }

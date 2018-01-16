@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.model.BillModel;
+import com.wgt.hotsausagenew.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,9 +102,9 @@ public class GiftCardDialogUtils {
             billModel = new BillModel(name, 1, price, R.id.btn_gift_sale);
         }catch (NumberFormatException e) {
             dialog_et_col_2.requestFocus();
-            Toast.makeText(context, "ERROR : Provide correct price", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToastGeneric(context, "ERROR : Provide correct price", Toast.LENGTH_SHORT).show();
         }catch (Exception e) {
-            Toast.makeText(context, "ERROR : "+e.getMessage(), Toast.LENGTH_SHORT).show();
+            ToastUtil.showToastGeneric(context, "ERROR : " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return billModel;
     }

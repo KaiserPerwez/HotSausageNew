@@ -101,7 +101,7 @@ public class TransactionAdapter extends BaseAdapter {
         holder.tV_sale.setText(Double.toString(singleTrans.getSale()));
 
         holder.tV_amount.setText(Double.toString(singleTrans.getAmount()));
-        holder.tV_discount.setText(Double.toString(singleTrans.getDiscounts()));
+        holder.tV_discount.setText(Double.toString(singleTrans.getDiscount()));
 
         holder.transaction_bill_list.setAdapter(billingAdapter);
         holder.transaction_expanded_view.setOnClickListener(new View.OnClickListener() {

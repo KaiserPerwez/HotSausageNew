@@ -31,6 +31,9 @@ public interface UserDAO {
     @Query("delete from usermodel where username = :userName")
     void deleteUser(String userName);
 
+    @Query("select user_id from usermodel where username = :userName")
+    int getIdByUsername(String userName);
+
 //    @Update(onConflict = OnConflictStrategy.REPLACE)
 //    void updateUser(UserModel userModel);
 

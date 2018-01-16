@@ -1,6 +1,7 @@
 package com.wgt.hotsausagenew.dialog;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,10 +18,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.adapter.AddUserAdapter;
 import com.wgt.hotsausagenew.database.AppDatabase;
 import com.wgt.hotsausagenew.model.UserModel;
+import com.wgt.hotsausagenew.network.SyncUser;
+import com.wgt.hotsausagenew.utils.ConnectionDetector;
+import com.wgt.hotsausagenew.utils.Constant;
+import com.wgt.hotsausagenew.utils.ToastUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,37 +111,104 @@ public class AddUserDialogUtil implements DeleteDataDialogUtil.DeletionSelected 
         dialog_list_panel.setVisibility(View.VISIBLE);
         dialog_iV_add.setVisibility(View.VISIBLE);
         dialog_listview.setVisibility(View.VISIBLE);
+        dialog_et_col_1.setText("");
+        dialog_et_col_2.setText("");
+        dialog_et_col_3.setText("");
     }
 
     @OnClick(R.id.dialog_btn_add_item)
     public void addUserToListAndDatabase() {
-        UserModel user = validateData();
-        if (user != null) {
-            AppDatabase.getDatabase(ctx).userDAO().addUser(user);
-            Toast.makeText(ctx, "Stored", Toast.LENGTH_SHORT).show();
-            populateListView();
-            hideAddUserPanel();
+        final UserModel user = validateData();
+        if (user == null) {
+            return;
         }
+
+        ConnectionDetector detector = new ConnectionDetector(ctx, true);
+        detector.execute();
+        detector.setConnectionDetectorListener(new ConnectionDetector.ConnectionDetectorListener() {
+            @Override
+            public void onConnectionDetected(boolean status) {
+                if (!status) {
+                    ToastUtil.showToastGeneric(ctx, "No internet Connection.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                networkCall(user);
+            }
+        });
+    }
+
+    private void networkCall(UserModel user) {
+
+        String username = dialog_et_col_1.getText().toString();
+        final ProgressDialog dialog = new ProgressDialog(ctx);
+        dialog.setTitle("Adding user : " + username);
+        dialog.setMessage("please wait..");
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        SyncUser syncUser = new SyncUser(ctx);
+        syncUser.setSyncUserListener(SyncUser.KEY_UPLOAD_SINGLE_USER, new SyncUser.SyncUserListener() {
+            @Override
+            public void onSuccess(int key, String response) {
+                dialog.dismiss();
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(response);
+                    String code = jsonObject.getString("success");
+                    String message = jsonObject.getString("message");
+
+                    if (code.equals("1")) { // success response
+                        JSONArray jsonArray = new JSONArray(message);
+                        JSONObject obj = jsonArray.getJSONObject(0);
+                        int id = Integer.parseInt(obj.getString("id"));
+                        String username = obj.getString("username");
+                        String pass = obj.getString("password");
+                        String site = obj.getString("site");
+
+                        UserModel userModel = new UserModel(id, username, pass, site);
+                        AppDatabase.getDatabase(ctx).userDAO().addUser(userModel);
+                        ToastUtil.showToastGeneric(ctx, "User : " + username + ", successfully registered.", Toast.LENGTH_SHORT).show();
+                        populateListView();
+                        hideAddUserPanel();
+                    } else { // error on server side
+                        ToastUtil.showToastGeneric(ctx, "ERROR : " + message + "\nFailed to add user.", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    ToastUtil.showToastGeneric(ctx, "ERROR : data parsing error\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch (NumberFormatException e) {
+                    ToastUtil.showToastGeneric(ctx, "ERROR : data parsing error\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(int key, VolleyError error) {
+                dialog.dismiss();
+                ToastUtil.showToastGeneric(ctx, "ERROR : " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        syncUser.uploadSingleUser(user);
+
     }
 
     private UserModel validateData() {
         String username = dialog_et_col_1.getText().toString();
         String pwd = dialog_et_col_2.getText().toString();
         String site = dialog_et_col_3.getText().toString();
-        if (username.length() < 1){
-            Toast.makeText(ctx, "ERROR : Provide Username", Toast.LENGTH_SHORT).show();
+        if (username.length() < 1) {
+            ToastUtil.showToastGeneric(ctx, "ERROR : Provide Username", Toast.LENGTH_SHORT).show();
             dialog_et_col_1.requestFocus();
             return null;
-        }else if (pwd.length() < 1) {
-            Toast.makeText(ctx, "ERROR : Provide Password", Toast.LENGTH_SHORT).show();
+        } else if (pwd.length() < 1) {
+            ToastUtil.showToastGeneric(ctx, "ERROR : Provide Password", Toast.LENGTH_SHORT).show();
             dialog_et_col_2.requestFocus();
             return null;
-        }else if (site.length() < 1) {
-            Toast.makeText(ctx, "ERROR : Provide Site", Toast.LENGTH_SHORT).show();
+        } else if (site.length() < 1) {
+            ToastUtil.showToastGeneric(ctx, "ERROR : Provide Site", Toast.LENGTH_SHORT).show();
             dialog_et_col_3.requestFocus();
             return null;
         }
-        return new UserModel(username, pwd, site, 0);
+        return new UserModel(0, username, pwd, site);
     }
 
     private void modifyUiAsPerRequirement() {
@@ -154,15 +231,20 @@ public class AddUserDialogUtil implements DeleteDataDialogUtil.DeletionSelected 
     public void populateListView() {
         //send list from database
         userModelList = new ArrayList<>();
-        /*userModelList.add(new UserModel("user 1", "pass 1", "site 1", 0));
-        userModelList.add(new UserModel("user 2", "pass 2", "site 2", 0));
-        userModelList.add(new UserModel("user 3", "pass 3", "site 3", 0));*/
-        userModelList =  AppDatabase.getDatabase(ctx).userDAO().getAllUser();
+        userModelList = AppDatabase.getDatabase(ctx).userDAO().getAllUser();
+
         addUserAdapter = new AddUserAdapter(userModelList, ctx);
         dialog_listview.setAdapter(addUserAdapter);
         dialog_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String itemToBeDeleted = (userModelList.get(position)).username;
+
+                // username won't be deleted.
+                if (itemToBeDeleted.equals(Constant.ADMIN_USERNAME)) {
+                    ToastUtil.showToastGeneric(ctx, "Admin can't be deleted", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
                 final Dialog dialog = new Dialog(ctx);// Create custom dialog object
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -170,7 +252,6 @@ public class AddUserDialogUtil implements DeleteDataDialogUtil.DeletionSelected 
                 dialog.setContentView(R.layout.dialog_delete_alert);
                 dialog.show();
 
-                String itemToBeDeleted = (userModelList.get(position)).username;
                 DeleteDataDialogUtil deleteDataDialogUtil = new DeleteDataDialogUtil(itemToBeDeleted, AddUserDialogUtil.this, dialog);
                 return false;
             }
@@ -178,9 +259,60 @@ public class AddUserDialogUtil implements DeleteDataDialogUtil.DeletionSelected 
     }
 
     @Override
-    public void onDeletionSelected(String itemName) {
-        //addUserAdapter.removeItem(itemName);
-        AppDatabase.getDatabase(ctx).userDAO().deleteUser(itemName);
-        populateListView();
+    public void onDeletionSelected(final String itemName) {
+        ConnectionDetector detector = new ConnectionDetector(ctx, true);
+        detector.execute();
+        detector.setConnectionDetectorListener(new ConnectionDetector.ConnectionDetectorListener() {
+            @Override
+            public void onConnectionDetected(boolean status) {
+                if (!status) {
+                    ToastUtil.showToastGeneric(ctx, "No internet connection", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                deleteNetworkCall(itemName);
+            }
+        });
+    }
+
+    private void deleteNetworkCall(final String itemName) {
+        final ProgressDialog dialog = new ProgressDialog(ctx);
+        dialog.setTitle("Deleting user : " + itemName);
+        dialog.setMessage("please wait..");
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        int id = AppDatabase.getDatabase(ctx).userDAO().getIdByUsername(itemName);
+        SyncUser syncUser = new SyncUser(ctx);
+        syncUser.setSyncUserListener(SyncUser.KEY_DELETE_SINGLE_USER, new SyncUser.SyncUserListener() {
+            @Override
+            public void onSuccess(int key, String response) {
+                dialog.dismiss();
+
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(response);
+                    String code = jsonObject.getString("success");
+                    String message = jsonObject.getString("message");
+                    if (code.equals("1")) {
+                        AppDatabase.getDatabase(ctx).userDAO().deleteUser(itemName);
+                        ToastUtil.showToastGeneric(ctx, "User : " + itemName + ", deleted successfully", Toast.LENGTH_SHORT).show();
+                        populateListView();
+                    } else {
+                        ToastUtil.showToastGeneric(ctx, "ERROR : " + message, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    ToastUtil.showToastGeneric(ctx, "PARSING ERROR : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int key, VolleyError error) {
+                dialog.dismiss();
+                ToastUtil.showToastGeneric(ctx, "NETWORK ERROR : " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        syncUser.deleteSingleUserFromRemote(id);
     }
 }

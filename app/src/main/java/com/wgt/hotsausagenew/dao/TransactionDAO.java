@@ -33,6 +33,7 @@ public interface TransactionDAO {
     @Query("SELECT * from TransactionModel where date = :date and month = :month and year = :year")
     List<TransactionModel> getAllTransByDate(int date, int month, int year);
 
+    //@Query("DELETE from TransactionModel where trans_id = :trans_id AND sync_status = 1 AND trans_id <10 ")
     @Query("DELETE from TransactionModel where trans_id = :trans_id")
     int deleteTransactionByID(int trans_id);
 }

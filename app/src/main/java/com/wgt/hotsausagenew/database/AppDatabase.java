@@ -16,7 +16,7 @@ import com.wgt.hotsausagenew.model.UserModel;
  * Created by Admin on 26-12-2017.
  */
 
-@Database(entities = {UserModel.class, TransactionModel.class, BillModel.class}, version = 3, exportSchema = false)
+@Database(entities = {UserModel.class, TransactionModel.class, BillModel.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 

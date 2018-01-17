@@ -54,13 +54,13 @@ public class SyncTransaction implements Response.ErrorListener, Response.Listene
         Gson gson = new Gson();
         final String requestBody = gson.toJson(listOfTrans); //convert to json
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Urls.BASE_URL, this, this) {
-            @Override
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Urls.UPLOAD_TRANSACTION, this, this) {
+            /*@Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
                 return params;
-            }
+            }*/
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.android.volley.VolleyError;
 import com.wgt.hotsausagenew.database.AppDatabase;
-import com.wgt.hotsausagenew.network.SyncTransaction;
+import com.wgt.hotsausagenew.networking.SyncTransaction;
 import com.wgt.hotsausagenew.utils.ConnectionDetector;
 
 import org.json.JSONException;

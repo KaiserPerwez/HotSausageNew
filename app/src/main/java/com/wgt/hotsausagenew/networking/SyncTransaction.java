@@ -1,4 +1,4 @@
-package com.wgt.hotsausagenew.network;
+package com.wgt.hotsausagenew.networking;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -48,7 +48,7 @@ public class SyncTransaction implements Response.ErrorListener, Response.Listene
         }
     }
 
-    //actual network logic
+    //actual networking logic
     public void startSyncing() {
         getAllTransactions();
         Gson gson = new Gson();

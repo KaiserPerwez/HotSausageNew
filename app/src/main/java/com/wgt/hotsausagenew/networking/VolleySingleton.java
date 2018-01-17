@@ -1,4 +1,4 @@
-package com.wgt.hotsausagenew.network;
+package com.wgt.hotsausagenew.networking;
 
 /**
  * Created by debasish on 11-01-2018.

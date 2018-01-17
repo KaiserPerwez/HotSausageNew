@@ -23,7 +23,7 @@ import com.wgt.hotsausagenew.R;
 import com.wgt.hotsausagenew.adapter.AddUserAdapter;
 import com.wgt.hotsausagenew.database.AppDatabase;
 import com.wgt.hotsausagenew.model.UserModel;
-import com.wgt.hotsausagenew.network.SyncUser;
+import com.wgt.hotsausagenew.networking.SyncUser;
 import com.wgt.hotsausagenew.utils.ConnectionDetector;
 import com.wgt.hotsausagenew.utils.Constant;
 import com.wgt.hotsausagenew.utils.ToastUtil;

@@ -27,7 +27,7 @@ import com.wgt.hotsausagenew.database.AppDatabase;
 import com.wgt.hotsausagenew.dialog.AddUserDialogUtil;
 import com.wgt.hotsausagenew.model.TransactionModel;
 import com.wgt.hotsausagenew.model.UserModel;
-import com.wgt.hotsausagenew.network.SyncUser;
+import com.wgt.hotsausagenew.networking.SyncUser;
 import com.wgt.hotsausagenew.receiver.UpdateReceiver;
 import com.wgt.hotsausagenew.utils.ConnectionDetector;
 import com.wgt.hotsausagenew.utils.Constant;
@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        dialog.setMessage("Checking network status...");
+        dialog.setMessage("Checking networking status...");
         dialog.show();
         ConnectionDetector detector = new ConnectionDetector(this, false);
         detector.execute();

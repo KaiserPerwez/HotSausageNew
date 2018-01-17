@@ -1,4 +1,4 @@
-package com.wgt.hotsausagenew.network;
+package com.wgt.hotsausagenew.networking;
 
 import android.content.Context;
 import android.widget.Toast;

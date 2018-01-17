@@ -23,7 +23,7 @@ public class ConnectionDetector extends AsyncTask<Void, Void, Boolean> {
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
-            dialog.setMessage("Checking network status...");
+            dialog.setMessage("Checking networking status...");
         }
     }
     /*public boolean isConnectedToNetwork() {
